@@ -1,9 +1,10 @@
 import React from 'react';
+import Layout from '../components/Layout';
 
 const Address = () => (
-	<div>
+	<Layout>
 		<div>Address</div>
-	</div>
+	</Layout>
 );
 
 export default Address;

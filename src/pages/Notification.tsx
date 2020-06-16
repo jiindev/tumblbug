@@ -1,9 +1,10 @@
 import React from 'react';
+import Layout from '../components/Layout';
 
 const Notification = () => (
-	<div>
-		<div>account</div>
-	</div>
+	<Layout>
+		<div>Notification</div>
+	</Layout>
 );
 
 export default Notification;

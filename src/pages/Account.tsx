@@ -1,9 +1,10 @@
 import React from 'react';
+import Layout from '../components/Layout';
 
 const Account = () => (
-	<div>
-		<div>account</div>
-	</div>
+	<Layout>
+		<div>Account</div>
+	</Layout>
 );
 
 export default Account;

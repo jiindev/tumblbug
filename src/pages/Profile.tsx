@@ -1,9 +1,10 @@
 import React from 'react';
+import Layout from '../components/Layout';
 
 const Profile = () => (
-	<div>
-		<div>profile</div>
-	</div>
+	<Layout>
+		<div>Paymethod</div>
+	</Layout>
 );
 
 export default Profile;
