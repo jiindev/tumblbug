@@ -8,7 +8,7 @@ type ComponentsProps = {
 const Layout = ({ children }: ComponentsProps) => (
 	<div>
 		<Header route={window.location.pathname} />
-		{children}
+		<div className="center">{children}</div>
 	</div>
 );
 
