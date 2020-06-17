@@ -313,9 +313,10 @@ const H3 = styled.h3`
 	padding: 55px 0 20px 0;
 `;
 const AddressDiv = styled.div`
-	border: 1px solid #979797;
-	border-radius: 8px;
-	width: 100%;
+	border-top: 1px solid #979797;
+	border-bottom: 1px solid #979797;
+	width: 100vw;
+	margin-left: -20px;
 	box-sizing: border-box;
 	& > button {
 		width: 100%;
@@ -326,6 +327,12 @@ const AddressDiv = styled.div`
 		outline: none;
 		font-size: 16px;
 		color: #252525;
+	}
+	@media only screen and (min-width: 768px) {
+		width: 100%;
+		margin-left: 0;
+		border: 1px solid #979797;
+		border-radius: 8px;
 	}
 	@media only screen and (min-width: 1024px) {
 		max-width: 660px;
@@ -440,6 +447,9 @@ const MoreModal = styled.div`
 const InfoDiv = styled(AddressDiv)`
 	margin: 30px 0;
 	padding: 20px;
+	width: 100%;
+	border: 1px solid #979797;
+	border-radius: 8px;
 	& p {
 		line-height: 1.54;
 		color: #989898;
