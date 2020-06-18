@@ -16,6 +16,10 @@ const AddressItem = ({ address, defaultSet }: AddressItemProps) => {
 	const onClickMoreButton = () => {
 		setShowMoreModal(true);
 	};
+	const onClickDefaultButton = () => {
+		onSetDefault();
+		setShowMoreModal(false);
+	};
 	const onClickDeleteButton = () => {
 		setShowMoreModal(false);
 		onShowDeleteModal();
@@ -54,7 +58,7 @@ const AddressItem = ({ address, defaultSet }: AddressItemProps) => {
 				{showMoreModal && (
 					<MoreModal>
 						<ul>
-							<li onClick={onSetDefault}>기본 배송지 설정</li>
+							<li onClick={onClickDefaultButton}>기본 배송지 설정</li>
 							<li onClick={onClickDeleteButton}>삭제</li>
 						</ul>
 					</MoreModal>

@@ -23,6 +23,10 @@ const AddressPage = () => {
 		loadAddresses(addresses[addresses.length - 1].id);
 	};
 
+	const onCloseAddModal = () => {
+		setShowAddModal(false);
+	};
+
 	return (
 		<Layout>
 			<Title>
@@ -35,8 +39,8 @@ const AddressPage = () => {
 				</ToastUI>
 			)}
 			{showAddModal && (
-				<Dim>
-					<AddAddressModal />
+				<Dim onClick={onCloseAddModal}>
+					<AddAddressModal onCloseAddModal={onCloseAddModal} />
 				</Dim>
 			)}
 			<Contents>

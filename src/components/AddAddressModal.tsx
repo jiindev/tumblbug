@@ -1,8 +1,11 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import styled from 'styled-components';
 import useAddAddress from '../hooks/useAddAddress';
+type AddAddressModalProps = {
+	onCloseAddModal: () => void;
+};
 
-const AddAddressModal = () => {
+const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
 	const [name, setName] = useState('');
 	const [postnumber, setPostnumber] = useState('');
 	const [address, setAddress] = useState('');
@@ -33,7 +36,7 @@ const AddAddressModal = () => {
 	};
 	return (
 		<AddModal>
-			<CloseButton />
+			<CloseButton onClick={onCloseAddModal} />
 			<h3>배송지 추가</h3>
 			<AddForm onSubmit={onSubmit}>
 				<div>
