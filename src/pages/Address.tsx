@@ -40,7 +40,6 @@ const AddressPage = () => {
 			)}
 			{showAddModal && (
 				<>
-					<Dim onClick={onCloseAddModal}></Dim>
 					<AddAddressModal onCloseAddModal={onCloseAddModal} />
 				</>
 			)}
@@ -73,16 +72,6 @@ const AddressPage = () => {
 		</Layout>
 	);
 };
-
-export const Dim = styled.div`
-	width: 100vw;
-	height: 100vh;
-	position: fixed;
-	top: 0;
-	left: 0;
-	background-color: rgba(118, 118, 118, 0.8);
-	z-index: 30;
-`;
 
 const ToastUI = styled.div`
 	position: fixed;

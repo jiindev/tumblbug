@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import styled from 'styled-components';
 import useAddAddress from '../hooks/useAddAddress';
 type AddAddressModalProps = {
@@ -14,6 +14,15 @@ const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
 	const [postnumberError, setPostnumberError] = useState('');
 	const [addressError, setAddressError] = useState('');
 	const addAddress = useAddAddress();
+
+	useEffect(() => {
+		document.body.style.cssText = `position: fixed; top: -${window.scrollY}px; width: 100%;`;
+		return () => {
+			const scrollY = document.body.style.top;
+			document.body.style.cssText = `position: ""; top: ""; width: "";`;
+			window.scrollTo(0, parseInt(scrollY || '0') * -1);
+		};
+	}, []);
 
 	const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
 		setName(e.target.value);
@@ -65,38 +74,51 @@ const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
 		});
 		onCloseAddModal();
 	};
+
 	return (
-		<AddModal>
-			<CloseButton onClick={onCloseAddModal} />
-			<h3>배송지 추가</h3>
-			<AddForm onSubmit={onSubmit}>
-				<div>
-					<div className="name">
-						<input type="text" name="name" placeholder="받는 사람" value={name} onChange={onChangeName} />
-						<span>{nameError}</span>
+		<>
+			<Dim onClick={onCloseAddModal} />
+			<AddModal>
+				<CloseButton onClick={onCloseAddModal} />
+				<h3>배송지 추가</h3>
+				<AddForm onSubmit={onSubmit}>
+					<div>
+						<div className="name">
+							<input type="text" name="name" placeholder="받는 사람" value={name} onChange={onChangeName} />
+							<span>{nameError}</span>
+						</div>
+						<div className="postNumber">
+							<input
+								type="text"
+								name="postNumber"
+								placeholder="우편번호"
+								value={postnumber}
+								onChange={onChangePostnumber}
+							/>
+							<span>{postnumberError}</span>
+						</div>
+						<div className="address">
+							<input type="text" name="address" placeholder="주소" value={address} onChange={onChangeAddress} />
+							<span>{addressError}</span>
+						</div>
 					</div>
-					<div className="postNumber">
-						<input
-							type="text"
-							name="postNumber"
-							placeholder="우편번호"
-							value={postnumber}
-							onChange={onChangePostnumber}
-						/>
-						<span>{postnumberError}</span>
-					</div>
-					<div className="address">
-						<input type="text" name="address" placeholder="주소" value={address} onChange={onChangeAddress} />
-						<span>{addressError}</span>
-					</div>
-				</div>
-				<input type="checkbox" name="defaultAddress" onChange={onChangeDefaultSet} />
-				<label htmlFor="defaultAddress">기본 배송지로 등록</label>
-				<button type="submit">등록 완료</button>
-			</AddForm>
-		</AddModal>
+					<input type="checkbox" name="defaultAddress" onChange={onChangeDefaultSet} />
+					<label htmlFor="defaultAddress">기본 배송지로 등록</label>
+					<button type="submit">등록 완료</button>
+				</AddForm>
+			</AddModal>
+		</>
 	);
 };
+export const Dim = styled.div`
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: rgba(118, 118, 118, 0.8);
+	z-index: 30;
+`;
 
 const AddModal = styled.div`
 	width: 100vw;
