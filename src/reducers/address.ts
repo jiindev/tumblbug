@@ -54,7 +54,7 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 			};
 			return {
 				...state,
-				addresses: [newAddress, ...addresses],
+				addresses: [newAddress, ...state.addresses],
 				defaultId: action.payload.defaultSet ? nextId : state.defaultId,
 			};
 		}

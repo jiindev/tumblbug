@@ -34,7 +34,8 @@ const AddressItem = ({ address, defaultSet }: AddressItemProps) => {
 	return (
 		<>
 			{showDeleteModal && (
-				<Dim onClick={onCloseDeleteModal}>
+				<>
+					<Dim onClick={onCloseDeleteModal} />
 					<CheckModal>
 						<p>정말 삭제하시겠습니까?</p>
 						<div className="buttons">
@@ -42,7 +43,7 @@ const AddressItem = ({ address, defaultSet }: AddressItemProps) => {
 							<button onClick={onCloseDeleteModal}>취소</button>
 						</div>
 					</CheckModal>
-				</Dim>
+				</>
 			)}
 			<AddressLi>
 				<div className="postNumber">
@@ -151,13 +152,14 @@ const CheckModal = styled.div`
 	border: solid 1px #979797;
 	background-color: white;
 	width: 312px;
-	position: absolute;
+	position: fixed;
 	left: 50%;
 	top: 50%;
 	margin-left: -156px;
 	margin-top: -90px;
 	text-align: center;
 	overflow: hidden;
+	z-index: 30;
 	& p {
 		font-size: 18px;
 		font-weight: 600;

@@ -39,9 +39,10 @@ const AddressPage = () => {
 				</ToastUI>
 			)}
 			{showAddModal && (
-				<Dim onClick={onCloseAddModal}>
+				<>
+					<Dim onClick={onCloseAddModal}></Dim>
 					<AddAddressModal onCloseAddModal={onCloseAddModal} />
-				</Dim>
+				</>
 			)}
 			<Contents>
 				<AddressDiv>
@@ -127,6 +128,7 @@ const Title = styled.div`
 		font-size: 16px;
 		color: #4ea3f8;
 		text-decoration: underline;
+		cursor: pointer;
 	}
 `;
 

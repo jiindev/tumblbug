@@ -10,16 +10,22 @@ const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
 	const [postnumber, setPostnumber] = useState('');
 	const [address, setAddress] = useState('');
 	const [defaultSet, setDefaultSet] = useState(false);
+	const [nameError, setNameError] = useState('');
+	const [postnumberError, setPostnumberError] = useState('');
+	const [addressError, setAddressError] = useState('');
 	const addAddress = useAddAddress();
 
 	const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
 		setName(e.target.value);
+		setNameError('');
 	};
 	const onChangePostnumber = (e: ChangeEvent<HTMLInputElement>) => {
 		setPostnumber(e.target.value);
+		setPostnumberError('');
 	};
 	const onChangeAddress = (e: ChangeEvent<HTMLInputElement>) => {
 		setAddress(e.target.value);
+		setAddressError('');
 	};
 	const onChangeDefaultSet = (e: ChangeEvent<HTMLInputElement>) => {
 		setDefaultSet(e.target.checked);
@@ -27,12 +33,37 @@ const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
 
 	const onSubmit = (e: FormEvent) => {
 		e.preventDefault();
+		let error = false;
+		if (name.replace(/ /g, '') === '') {
+			setNameError('받는 분 이름을 입력해주세요.');
+			error = true;
+		}
+		if (postnumber.replace(/ /g, '') === '') {
+			setPostnumberError('우편번호를 입력해주세요.');
+			error = true;
+		}
+		if (!/^[0-9]+$/.test(postnumber)) {
+			setPostnumberError('우편번호는 숫자만 입력 가능합니다.');
+			error = true;
+		}
+		if (address.replace(/ /g, '') === '') {
+			setAddressError('주소를 입력해주세요.');
+			error = true;
+		}
+		if (address.length > 25) {
+			setAddressError('주소는 25자를 넘을 수 없습니다.');
+			error = true;
+		}
+		if (error) {
+			return;
+		}
 		addAddress({
 			postnumber: parseInt(postnumber, 10),
 			name,
 			address,
 			defaultSet,
 		});
+		onCloseAddModal();
 	};
 	return (
 		<AddModal>
@@ -42,7 +73,7 @@ const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
 				<div>
 					<div className="name">
 						<input type="text" name="name" placeholder="받는 사람" value={name} onChange={onChangeName} />
-						<span>test</span>
+						<span>{nameError}</span>
 					</div>
 					<div className="postNumber">
 						<input
@@ -52,11 +83,11 @@ const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
 							value={postnumber}
 							onChange={onChangePostnumber}
 						/>
-						<span></span>
+						<span>{postnumberError}</span>
 					</div>
 					<div className="address">
 						<input type="text" name="address" placeholder="주소" value={address} onChange={onChangeAddress} />
-						<span>우편번호를 입력해주세요.</span>
+						<span>{addressError}</span>
 					</div>
 				</div>
 				<input type="checkbox" name="defaultAddress" onChange={onChangeDefaultSet} />
@@ -71,7 +102,9 @@ const AddModal = styled.div`
 	width: 100vw;
 	height: 100vh;
 	background-color: white;
-	position: absolute;
+	position: fixed;
+	left: 0;
+	top: 0;
 	overflow: hidden;
 	box-sizing: border-box;
 	padding: 25px;
@@ -85,6 +118,7 @@ const AddModal = styled.div`
 		border-radius: 6px;
 		box-shadow: 1px 3px 5px 0 rgba(47, 46, 46, 0.5);
 		border: solid 1px #979797;
+		position: fixed;
 		margin-left: -255px;
 		margin-top: -206px;
 		left: 50%;
@@ -119,7 +153,7 @@ const AddForm = styled.form`
 		color: #ed635e;
 		display: block;
 		margin-bottom: 23px;
-		width: 160px;
+		width: 100%;
 		height: 17px;
 	}
 	& .address,
