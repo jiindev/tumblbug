@@ -12,6 +12,7 @@ const AddressPage = () => {
 	const addresses = useAddress();
 	const defaultId = useDefaultAddress();
 	const [showAddModal, setShowAddModal] = useState(false);
+
 	const loadAddresses = useLoadAddresses();
 
 	const onClickAdd = () => {
@@ -21,6 +22,7 @@ const AddressPage = () => {
 	const onClickMore = () => {
 		loadAddresses(addresses[addresses.length - 1].id);
 	};
+
 	return (
 		<Layout>
 			<Title>
@@ -31,19 +33,6 @@ const AddressPage = () => {
 				<ToastUI>
 					<div>기본 배송지가 변경되었습니다.</div>
 				</ToastUI>
-			)}
-			{false && (
-				<Dim>
-					{false && (
-						<CheckModal>
-							<p>정말 삭제하시겠습니까?</p>
-							<div className="buttons">
-								<button>확인</button>
-								<button>취소</button>
-							</div>
-						</CheckModal>
-					)}
-				</Dim>
 			)}
 			{showAddModal && (
 				<Dim>
@@ -80,7 +69,7 @@ const AddressPage = () => {
 	);
 };
 
-const Dim = styled.div`
+export const Dim = styled.div`
 	width: 100vw;
 	height: 100vh;
 	position: fixed;
@@ -88,42 +77,6 @@ const Dim = styled.div`
 	left: 0;
 	background-color: rgba(118, 118, 118, 0.8);
 	z-index: 30;
-`;
-const CheckModal = styled.div`
-	border-radius: 6px;
-	box-shadow: 1px 3px 5px 0 rgba(47, 46, 46, 0.5);
-	border: solid 1px #979797;
-	background-color: white;
-	width: 312px;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-left: -156px;
-	margin-top: -90px;
-	text-align: center;
-	overflow: hidden;
-	& p {
-		font-size: 18px;
-		font-weight: 600;
-		color: #2f2f2f;
-		padding: 47px 0;
-	}
-	& div.buttons {
-		border-top: 1px solid #aaaaaa;
-	}
-	& button {
-		width: 50%;
-		border: none;
-		font-size: 18px;
-		font-weight: 600;
-		padding: 25px 0;
-		background-color: white;
-		color: #363636;
-		&:first-child {
-			border-right: 1px solid #aaaaaa;
-			color: #ed635e;
-		}
-	}
 `;
 
 const ToastUI = styled.div`

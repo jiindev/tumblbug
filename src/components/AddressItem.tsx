@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Address } from '../reducers/address';
 import useAddressActions from '../hooks/useAddressActions';
+import { Dim } from '../pages/Address';
 
 type AddressItemProps = {
 	address: Address;
@@ -10,32 +11,56 @@ type AddressItemProps = {
 
 const AddressItem = ({ address, defaultSet }: AddressItemProps) => {
 	const [showMoreModal, setShowMoreModal] = useState(false);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const { onDelete, onSetDefault } = useAddressActions(address.id);
 	const onClickMoreButton = () => {
 		setShowMoreModal(true);
 	};
+	const onClickDeleteButton = () => {
+		setShowMoreModal(false);
+		onShowDeleteModal();
+	};
+	const onShowDeleteModal = () => {
+		setShowDeleteModal(true);
+	};
+	const onCloseDeleteModal = () => {
+		setShowDeleteModal(false);
+	};
 
 	return (
-		<AddressLi>
-			<div className="postNumber">
-				{address.postnumber}
-				{defaultSet && <span>기본</span>}
-			</div>
-			<div className="address">{address.address}</div>
-			<MoreButton onClick={onClickMoreButton}>
-				<span />
-				<span />
-				<span />
-			</MoreButton>
-			{showMoreModal && (
-				<MoreModal>
-					<ul>
-						<li onClick={onSetDefault}>기본 배송지 설정</li>
-						<li onClick={onDelete}>삭제</li>
-					</ul>
-				</MoreModal>
+		<>
+			{showDeleteModal && (
+				<Dim onClick={onCloseDeleteModal}>
+					<CheckModal>
+						<p>정말 삭제하시겠습니까?</p>
+						<div className="buttons">
+							<button onClick={onDelete}>확인</button>
+							<button onClick={onCloseDeleteModal}>취소</button>
+						</div>
+					</CheckModal>
+				</Dim>
 			)}
-		</AddressLi>
+			<AddressLi>
+				<div className="postNumber">
+					{address.postnumber}
+					{defaultSet && <span>기본</span>}
+				</div>
+				<div className="address">{address.address}</div>
+				<MoreButton onClick={onClickMoreButton}>
+					<span />
+					<span />
+					<span />
+				</MoreButton>
+				{showMoreModal && (
+					<MoreModal>
+						<ul>
+							<li onClick={onSetDefault}>기본 배송지 설정</li>
+							<li onClick={onClickDeleteButton}>삭제</li>
+						</ul>
+					</MoreModal>
+				)}
+			</AddressLi>
+		</>
 	);
 };
 
@@ -112,6 +137,43 @@ const MoreModal = styled.div`
 		cursor: pointer;
 		&:hover {
 			background-color: #f4f4f4;
+		}
+	}
+`;
+
+const CheckModal = styled.div`
+	border-radius: 6px;
+	box-shadow: 1px 3px 5px 0 rgba(47, 46, 46, 0.5);
+	border: solid 1px #979797;
+	background-color: white;
+	width: 312px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -156px;
+	margin-top: -90px;
+	text-align: center;
+	overflow: hidden;
+	& p {
+		font-size: 18px;
+		font-weight: 600;
+		color: #2f2f2f;
+		padding: 47px 0;
+	}
+	& div.buttons {
+		border-top: 1px solid #aaaaaa;
+	}
+	& button {
+		width: 50%;
+		border: none;
+		font-size: 18px;
+		font-weight: 600;
+		padding: 25px 0;
+		background-color: white;
+		color: #363636;
+		&:first-child {
+			border-right: 1px solid #aaaaaa;
+			color: #ed635e;
 		}
 	}
 `;
