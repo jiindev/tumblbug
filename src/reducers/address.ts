@@ -1,13 +1,13 @@
 import { addresses } from '../data/addresses.json';
-
+const addressesData = addresses;
 const ADD_ADDRESS = 'address/ADD_ADDRESS' as const;
 const SET_DEFAULT_ADDRESS = 'address/SET_DEFAULT_ADDRESS' as const;
 const DELETE_ADDRESS = 'address/DELETE_ADDRESS' as const;
 const LOAD_ADDRESSES = 'address/LOAD_ADDRESSES' as const;
 
-export const addAddress = (postnumber: number, name: string, address: string) => ({
+export const addAddress = (data: { postnumber: number; name: string; address: string; defaultSet: boolean }) => ({
 	type: ADD_ADDRESS,
-	payload: { postnumber, name, address },
+	payload: data,
 });
 export const setDefaultAddress = (id: number) => ({
 	type: SET_DEFAULT_ADDRESS,
@@ -40,20 +40,23 @@ type AddressesState = {
 	defaultId: number;
 };
 
-const initialState: AddressesState = { addresses: addresses.slice(0, 5), defaultId: addresses[0].id };
+const initialState: AddressesState = { addresses: addressesData.slice(0, 5), defaultId: addressesData[0].id };
 
 function address(state: AddressesState = initialState, action: AddressAction): AddressesState {
 	switch (action.type) {
 		case ADD_ADDRESS: {
-			let addresses = [...state.addresses];
 			const nextId = Math.max(...state.addresses.map((address) => address.id)) + 1;
-			addresses = addresses.concat({
+			let newAddress = {
 				id: nextId,
 				postnumber: action.payload.postnumber,
 				name: action.payload.name,
 				address: action.payload.address,
-			});
-			return { ...state, addresses };
+			};
+			return {
+				...state,
+				addresses: [newAddress, ...addresses],
+				defaultId: action.payload.defaultSet ? nextId : state.defaultId,
+			};
 		}
 		case SET_DEFAULT_ADDRESS: {
 			const defaultId = action.payload;
@@ -68,31 +71,11 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 			return { ...state, addresses };
 		}
 		case LOAD_ADDRESSES: {
-			let addresses = [...state.addresses];
-			let loadedData = [
-				{
-					id: 12382726352,
-					postnumber: 203928,
-					name: '홍길동',
-					address: '서울시 강남구 강남대로 364, 11층',
-				},
-				{
-					id: 12382726390,
-					postnumber: 233958,
-					name: '고길동',
-					address: '서울시 강남구 가양대로 32, 가양아파트 21동 201호',
-				},
-				{
-					id: 12382726393,
-					postnumber: 243929,
-					name: '이영신',
-					address: '서울시 서초구 서초대로 311, 20층',
-				},
-			];
-			addresses.concat(loadedData);
+			const lastIndex = addressesData.findIndex((v) => v.id === action.payload);
+			const moreAddresses = addressesData.slice(lastIndex + 1, lastIndex + 6);
 			return {
 				...state,
-				addresses,
+				addresses: state.addresses.concat(moreAddresses),
 			};
 		}
 		default:

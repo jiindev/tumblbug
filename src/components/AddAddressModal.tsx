@@ -1,29 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import styled from 'styled-components';
+import useAddAddress from '../hooks/useAddAddress';
 
 const AddAddressModal = () => {
+	const [name, setName] = useState('');
+	const [postnumber, setPostnumber] = useState('');
+	const [address, setAddress] = useState('');
+	const [defaultSet, setDefaultSet] = useState(false);
+	const addAddress = useAddAddress();
+
+	const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
+		setName(e.target.value);
+	};
+	const onChangePostnumber = (e: ChangeEvent<HTMLInputElement>) => {
+		setPostnumber(e.target.value);
+	};
+	const onChangeAddress = (e: ChangeEvent<HTMLInputElement>) => {
+		setAddress(e.target.value);
+	};
+	const onChangeDefaultSet = (e: ChangeEvent<HTMLInputElement>) => {
+		setDefaultSet(e.target.checked);
+	};
+
+	const onSubmit = (e: FormEvent) => {
+		e.preventDefault();
+		addAddress({
+			postnumber: parseInt(postnumber, 10),
+			name,
+			address,
+			defaultSet,
+		});
+	};
 	return (
 		<AddModal>
 			<CloseButton />
 			<h3>배송지 추가</h3>
-			<AddForm action="">
+			<AddForm onSubmit={onSubmit}>
 				<div>
 					<div className="name">
-						<input type="text" name="name" placeholder="받는 사람" />
+						<input type="text" name="name" placeholder="받는 사람" value={name} onChange={onChangeName} />
 						<span>test</span>
 					</div>
 					<div className="postNumber">
-						<input type="text" name="postNumber" placeholder="우편번호" />
+						<input
+							type="text"
+							name="postNumber"
+							placeholder="우편번호"
+							value={postnumber}
+							onChange={onChangePostnumber}
+						/>
 						<span></span>
 					</div>
 					<div className="address">
-						<input type="text" name="address" placeholder="주소" />
+						<input type="text" name="address" placeholder="주소" value={address} onChange={onChangeAddress} />
 						<span>우편번호를 입력해주세요.</span>
 					</div>
 				</div>
-				<input type="checkbox" name="defaultAddress" id="" />
+				<input type="checkbox" name="defaultAddress" onChange={onChangeDefaultSet} />
 				<label htmlFor="defaultAddress">기본 배송지로 등록</label>
-				<button>등록 완료</button>
+				<button type="submit">등록 완료</button>
 			</AddForm>
 		</AddModal>
 	);

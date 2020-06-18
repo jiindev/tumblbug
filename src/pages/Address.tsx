@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import useAddress from '../hooks/useAddress';
 import useDefaultAddress from '../hooks/useDefaultAddress';
+import useLoadAddresses from '../hooks/useLoadAddresses';
 import AddressItem from '../components/AddressItem';
 import AddAddressModal from '../components/AddAddressModal';
 
@@ -11,12 +12,20 @@ const AddressPage = () => {
 	const addresses = useAddress();
 	const defaultId = useDefaultAddress();
 	const [showAddModal, setShowAddModal] = useState(false);
+	const loadAddresses = useLoadAddresses();
 
+	const onClickAdd = () => {
+		setShowAddModal(true);
+	};
+
+	const onClickMore = () => {
+		loadAddresses(addresses[addresses.length - 1].id);
+	};
 	return (
 		<Layout>
 			<Title>
 				<H3>등록된 배송지</H3>
-				<span>추가</span>
+				<span onClick={onClickAdd}>추가</span>
 			</Title>
 			{false && (
 				<ToastUI>
@@ -55,7 +64,7 @@ const AddressPage = () => {
 									return <AddressItem address={v} defaultSet={defaultId === v.id} key={v.id} />;
 								})}
 							</ul>
-							<button>더보기</button>
+							<button onClick={onClickMore}>더보기</button>
 						</>
 					)}
 				</AddressDiv>
