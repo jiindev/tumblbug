@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import Index from './pages/Index';
 import Account from './pages/Account';
-import Address from './pages/Address';
+import AddressPage from './pages/Address';
 import Notification from './pages/Notification';
 import Paymethod from './pages/Paymethod';
 import Profile from './pages/Profile';
@@ -14,7 +14,7 @@ const Router = () => {
 			<Switch>
 				<Route exact={true} path="/" component={Index} />
 				<Route path="/account" component={Account} />
-				<Route path="/address" component={Address} />
+				<Route path="/address" component={AddressPage} />
 				<Route path="/notification" component={Notification} />
 				<Route path="/paymethod" component={Paymethod} />
 				<Route path="/profile" component={Profile} />
