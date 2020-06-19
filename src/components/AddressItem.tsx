@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Address } from '../reducers/address';
 import useAddressActions from '../hooks/useAddressActions';
@@ -14,26 +14,26 @@ const AddressItem = ({ address, defaultSet }: AddressItemProps) => {
 	const [showMoreLayer, setShowMoreLayer] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const { onDelete, onSetDefault } = useAddressActions(address.id);
-	const onClickMoreButton = () => {
+	const onClickMoreButton = useCallback(() => {
 		setShowMoreLayer(true);
-	};
-	const onClickDefaultButton = () => {
+	}, []);
+	const onClickDefaultButton = useCallback(() => {
 		onSetDefault();
 		setShowMoreLayer(false);
-	};
-	const onClickDeleteButton = () => {
+	}, [onSetDefault]);
+	const onShowDeleteModal = useCallback(() => {
+		setShowDeleteModal(true);
+	}, []);
+	const onClickDeleteButton = useCallback(() => {
 		setShowMoreLayer(false);
 		onShowDeleteModal();
-	};
-	const onCloseMoreLayer = () => {
+	}, [onShowDeleteModal]);
+	const onCloseMoreLayer = useCallback(() => {
 		setShowMoreLayer(false);
-	};
-	const onShowDeleteModal = () => {
-		setShowDeleteModal(true);
-	};
-	const onCloseDeleteModal = () => {
+	}, []);
+	const onCloseDeleteModal = useCallback(() => {
 		setShowDeleteModal(false);
-	};
+	}, []);
 
 	return (
 		<>

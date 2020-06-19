@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Layout from '../components/Layout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -15,17 +15,17 @@ const AddressPage = () => {
 
 	const loadAddresses = useLoadAddresses();
 
-	const onClickAdd = () => {
+	const onClickAdd = useCallback(() => {
 		setShowAddModal(true);
-	};
+	}, []);
 
-	const onClickMore = () => {
+	const onClickMore = useCallback(() => {
 		loadAddresses(addresses[addresses.length - 1].id);
-	};
+	}, [loadAddresses, addresses]);
 
-	const onCloseAddModal = () => {
+	const onCloseAddModal = useCallback(() => {
 		setShowAddModal(false);
-	};
+	}, []);
 
 	return (
 		<Layout>

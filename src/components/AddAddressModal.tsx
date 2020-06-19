@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
+import React, { useEffect, useCallback, useState, ChangeEvent, FormEvent } from 'react';
 import styled from 'styled-components';
 import useAddAddress from '../hooks/useAddAddress';
 type AddAddressModalProps = {
@@ -24,56 +24,59 @@ const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
 		};
 	}, []);
 
-	const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
+	const onChangeName = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		setName(e.target.value);
 		setNameError('');
-	};
-	const onChangePostnumber = (e: ChangeEvent<HTMLInputElement>) => {
+	}, []);
+	const onChangePostnumber = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		setPostnumber(e.target.value);
 		setPostnumberError('');
-	};
-	const onChangeAddress = (e: ChangeEvent<HTMLInputElement>) => {
+	}, []);
+	const onChangeAddress = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		setAddress(e.target.value);
 		setAddressError('');
-	};
-	const onChangeDefaultSet = (e: ChangeEvent<HTMLInputElement>) => {
+	}, []);
+	const onChangeDefaultSet = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		setDefaultSet(e.target.checked);
-	};
+	}, []);
 
-	const onSubmit = (e: FormEvent) => {
-		e.preventDefault();
-		let error = false;
-		if (name.replace(/ /g, '') === '') {
-			setNameError('받는 분 이름을 입력해주세요.');
-			error = true;
-		}
-		if (postnumber.replace(/ /g, '') === '') {
-			setPostnumberError('우편번호를 입력해주세요.');
-			error = true;
-		}
-		if (!/^[0-9]+$/.test(postnumber)) {
-			setPostnumberError('우편번호는 숫자만 입력 가능합니다.');
-			error = true;
-		}
-		if (address.replace(/ /g, '') === '') {
-			setAddressError('주소를 입력해주세요.');
-			error = true;
-		}
-		if (address.length > 25) {
-			setAddressError('주소는 25자를 넘을 수 없습니다.');
-			error = true;
-		}
-		if (error) {
-			return;
-		}
-		addAddress({
-			postnumber: parseInt(postnumber, 10),
-			name,
-			address,
-			defaultSet,
-		});
-		onCloseAddModal();
-	};
+	const onSubmit = useCallback(
+		(e: FormEvent) => {
+			e.preventDefault();
+			let error = false;
+			if (name.replace(/ /g, '') === '') {
+				setNameError('받는 분 이름을 입력해주세요.');
+				error = true;
+			}
+			if (postnumber.replace(/ /g, '') === '') {
+				setPostnumberError('우편번호를 입력해주세요.');
+				error = true;
+			}
+			if (!/^[0-9]+$/.test(postnumber)) {
+				setPostnumberError('우편번호는 숫자만 입력 가능합니다.');
+				error = true;
+			}
+			if (address.replace(/ /g, '') === '') {
+				setAddressError('주소를 입력해주세요.');
+				error = true;
+			}
+			if (address.length > 25) {
+				setAddressError('주소는 25자를 넘을 수 없습니다.');
+				error = true;
+			}
+			if (error) {
+				return;
+			}
+			addAddress({
+				postnumber: parseInt(postnumber, 10),
+				name,
+				address,
+				defaultSet,
+			});
+			onCloseAddModal();
+		},
+		[addAddress, onCloseAddModal, name, postnumber, address, defaultSet]
+	);
 
 	return (
 		<>

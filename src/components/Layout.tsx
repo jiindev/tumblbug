@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Header from '../components/Header';
 
 type ComponentsProps = {
 	children: React.ReactNode;
-	tt?: string;
 };
 
-const Layout = ({ children, tt }: ComponentsProps) => {
+const Layout = ({ children }: ComponentsProps) => {
 	return (
 		<div>
 			<Header route={window.location.pathname} />
