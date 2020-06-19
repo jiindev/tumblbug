@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import styled from 'styled-components';
 import { Dim } from './AddAddressModal';
 
@@ -7,7 +7,7 @@ type DeleteModalProps = {
 	onCloseDeleteModal: () => void;
 };
 
-const DeleteAddressModal = ({ onDelete, onCloseDeleteModal }: DeleteModalProps) => {
+const DeleteAddressModal = memo(({ onDelete, onCloseDeleteModal }: DeleteModalProps) => {
 	useEffect(() => {
 		document.body.style.cssText = `position: fixed; top: -${window.scrollY}px; width: 100%;`;
 		return () => {
@@ -29,7 +29,7 @@ const DeleteAddressModal = ({ onDelete, onCloseDeleteModal }: DeleteModalProps) 
 			</CheckModal>
 		</>
 	);
-};
+});
 const CheckModal = styled.div`
 	border-radius: 6px;
 	box-shadow: 1px 3px 5px 0 rgba(47, 46, 46, 0.5);

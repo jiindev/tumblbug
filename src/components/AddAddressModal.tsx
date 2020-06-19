@@ -1,11 +1,11 @@
-import React, { useEffect, useCallback, useState, ChangeEvent, FormEvent } from 'react';
+import React, { memo, useEffect, useCallback, useState, ChangeEvent, FormEvent } from 'react';
 import styled from 'styled-components';
 import useAddAddress from '../hooks/useAddAddress';
 type AddAddressModalProps = {
 	onCloseAddModal: () => void;
 };
 
-const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
+const AddAddressModal = memo(({ onCloseAddModal }: AddAddressModalProps) => {
 	const [name, setName] = useState('');
 	const [postnumber, setPostnumber] = useState('');
 	const [address, setAddress] = useState('');
@@ -112,7 +112,7 @@ const AddAddressModal = ({ onCloseAddModal }: AddAddressModalProps) => {
 			</AddModal>
 		</>
 	);
-};
+});
 export const Dim = styled.div`
 	width: 100vw;
 	height: 100vh;

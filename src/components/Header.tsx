@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ type TabPropsType = {
 	activeTab: boolean;
 };
 
-const Header = ({ route }: ComponentsProps) => (
+const Header = memo(({ route }: ComponentsProps) => (
 	<Wrap>
 		<div className="center">
 			<H1>
@@ -37,7 +37,7 @@ const Header = ({ route }: ComponentsProps) => (
 			</TabList>
 		</div>
 	</Wrap>
-);
+));
 
 const Wrap = styled.header`
 	border-bottom: solid 1px #cecece;

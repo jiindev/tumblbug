@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Layout from '../components/Layout';
 
-const Paymethod = () => (
+const Paymethod = memo(() => (
 	<Layout>
 		<div>Paymethod</div>
 	</Layout>
-);
+));
 
 export default Paymethod;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Dim } from './AddAddressModal';
 
@@ -8,7 +8,7 @@ type MoreLayerProps = {
 	onClickDeleteButton: () => void;
 };
 
-const MoreLayer = ({ onCloseMoreLayer, onClickDefaultButton, onClickDeleteButton }: MoreLayerProps) => {
+const MoreLayer = memo(({ onCloseMoreLayer, onClickDefaultButton, onClickDeleteButton }: MoreLayerProps) => {
 	return (
 		<>
 			<TransparentDim onClick={onCloseMoreLayer} />
@@ -20,7 +20,7 @@ const MoreLayer = ({ onCloseMoreLayer, onClickDefaultButton, onClickDeleteButton
 			</Layer>
 		</>
 	);
-};
+});
 
 const TransparentDim = styled(Dim)`
 	background: transparent;

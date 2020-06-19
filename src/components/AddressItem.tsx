@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Address } from '../reducers/address';
 import useAddressActions from '../hooks/useAddressActions';
@@ -10,7 +10,7 @@ type AddressItemProps = {
 	defaultSet?: boolean;
 };
 
-const AddressItem = ({ address, defaultSet }: AddressItemProps) => {
+const AddressItem = memo(({ address, defaultSet }: AddressItemProps) => {
 	const [showMoreLayer, setShowMoreLayer] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const { onDelete, onSetDefault } = useAddressActions(address.id);
@@ -63,7 +63,7 @@ const AddressItem = ({ address, defaultSet }: AddressItemProps) => {
 			</AddressLi>
 		</>
 	);
-};
+});
 
 const AddressLi = styled.li`
 	border-bottom: 1px solid #979797;

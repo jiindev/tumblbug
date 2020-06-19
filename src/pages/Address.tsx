@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo, memo } from 'react';
 import Layout from '../components/Layout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -8,10 +8,11 @@ import useLoadAddresses from '../hooks/useLoadAddresses';
 import AddressItem from '../components/AddressItem';
 import AddAddressModal from '../components/AddAddressModal';
 
-const AddressPage = () => {
+const AddressPage = memo(() => {
 	const addresses = useAddress();
 	const defaultId = useDefaultAddress();
 	const [showAddModal, setShowAddModal] = useState(false);
+	const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === defaultId), [addresses, defaultId]);
 
 	const loadAddresses = useLoadAddresses();
 
@@ -53,9 +54,18 @@ const AddressPage = () => {
 					) : (
 						<>
 							<ul>
-								{addresses.map((v) => {
-									return <AddressItem address={v} defaultSet={defaultId === v.id} key={v.id} />;
-								})}
+								{defaultIndexInArray !== -1 && (
+									<AddressItem address={addresses[defaultIndexInArray]} defaultSet={true} key={defaultId} />
+								)}
+								{addresses
+									.filter((v) => {
+										if (defaultIndexInArray !== -1) {
+											return v.id !== defaultId;
+										} else return true;
+									})
+									.map((v) => {
+										return <AddressItem address={v} defaultSet={false} key={v.id} />;
+									})}
 							</ul>
 							<button onClick={onClickMore}>더보기</button>
 						</>
@@ -71,7 +81,7 @@ const AddressPage = () => {
 			</Contents>
 		</Layout>
 	);
-};
+});
 
 const ToastUI = styled.div`
 	position: fixed;
