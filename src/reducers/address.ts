@@ -1,20 +1,30 @@
 import { addresses } from '../data/addresses.json';
 const addressesData = addresses;
-const ADD_ADDRESS = 'address/ADD_ADDRESS' as const;
-const SET_DEFAULT_ADDRESS = 'address/SET_DEFAULT_ADDRESS' as const;
-const DELETE_ADDRESS = 'address/DELETE_ADDRESS' as const;
-const LOAD_ADDRESSES = 'address/LOAD_ADDRESSES' as const;
+export const ADD_ADDRESS_REQUEST = 'ADD_ADDRESS_REQUEST' as const;
+export const ADD_ADDRESS_SUCCESS = 'ADD_ADDRESS_SUCCESS' as const;
+export const SET_DEFAULT_ADDRESS = 'SET_DEFAULT_ADDRESS' as const;
+export const DELETE_ADDRESS_REQUEST = 'DELETE_ADDRESS_REQUEST' as const;
+export const DELETE_ADDRESS_SUCCESS = 'DELETE_ADDRESS_SUCCESS' as const;
+export const LOAD_ADDRESSES = 'LOAD_ADDRESSES' as const;
 
-export const addAddress = (data: { postnumber: number; name: string; address: string; defaultSet: boolean }) => ({
-	type: ADD_ADDRESS,
+export const addAddressRequest = (data: AddedAddress) => ({
+	type: ADD_ADDRESS_REQUEST,
+	payload: data,
+});
+export const addAddressSuccess = (data: AddedAddress) => ({
+	type: ADD_ADDRESS_SUCCESS,
 	payload: data,
 });
 export const setDefaultAddress = (id: number) => ({
 	type: SET_DEFAULT_ADDRESS,
 	payload: id,
 });
-export const deleteAddress = (id: number) => ({
-	type: DELETE_ADDRESS,
+export const deleteAddressRequest = (id: number) => ({
+	type: DELETE_ADDRESS_REQUEST,
+	payload: id,
+});
+export const deleteAddressSuccess = (id: number) => ({
+	type: DELETE_ADDRESS_SUCCESS,
 	payload: id,
 });
 export const loadAddresses = (lastId?: number) => ({
@@ -23,10 +33,19 @@ export const loadAddresses = (lastId?: number) => ({
 });
 
 type AddressAction =
-	| ReturnType<typeof addAddress>
+	| ReturnType<typeof addAddressRequest>
+	| ReturnType<typeof addAddressSuccess>
 	| ReturnType<typeof setDefaultAddress>
-	| ReturnType<typeof deleteAddress>
+	| ReturnType<typeof deleteAddressRequest>
+	| ReturnType<typeof deleteAddressSuccess>
 	| ReturnType<typeof loadAddresses>;
+
+export type AddedAddress = {
+	postnumber: number;
+	name: string;
+	address: string;
+	defaultSet: boolean;
+};
 
 export type Address = {
 	id: number;
@@ -42,14 +61,17 @@ type AddressesState = {
 };
 
 const initialState: AddressesState = {
-	addresses: addressesData.slice(0, 5),
+	addresses: [],
 	hasMoreAddresses: true,
 	defaultId: addressesData[0].id,
 };
 
 function address(state: AddressesState = initialState, action: AddressAction): AddressesState {
 	switch (action.type) {
-		case ADD_ADDRESS: {
+		case ADD_ADDRESS_REQUEST: {
+			return state;
+		}
+		case ADD_ADDRESS_SUCCESS: {
 			const nextId = Math.max(...state.addresses.map((address) => address.id)) + 1;
 			let newAddress = {
 				id: nextId,
@@ -70,7 +92,10 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 				defaultId,
 			};
 		}
-		case DELETE_ADDRESS: {
+		case DELETE_ADDRESS_REQUEST: {
+			return state;
+		}
+		case DELETE_ADDRESS_SUCCESS: {
 			let addresses = [...state.addresses];
 			addresses = addresses.filter((address) => address.id !== action.payload);
 			return {
