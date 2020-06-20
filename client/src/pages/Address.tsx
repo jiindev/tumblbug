@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, memo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, memo } from 'react';
 import Layout from '../components/Layout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -16,6 +16,10 @@ const AddressPage = memo(() => {
 	const [showAddModal, setShowAddModal] = useState(false);
 	const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === defaultId), [addresses, defaultId]);
 
+	useEffect(() => {
+		loadAddresses();
+	}, []);
+
 	const loadAddresses = useLoadAddresses();
 
 	const onClickAdd = useCallback(() => {
@@ -23,7 +27,7 @@ const AddressPage = memo(() => {
 	}, []);
 
 	const onClickMore = useCallback(() => {
-		loadAddresses(addresses[addresses.length - 1].id);
+		loadAddresses(addresses[0] && addresses[addresses.length - 1].id);
 	}, [loadAddresses, addresses]);
 
 	const onCloseAddModal = useCallback(() => {

@@ -6,9 +6,12 @@ import {
 	deleteAddressSuccess,
 	deleteAddressRequest,
 	DELETE_ADDRESS_REQUEST,
+	loadAddressesSuccess,
+	loadAddressesRequest,
+	LOAD_ADDRESSES_REQUEST,
 } from '../reducers/address';
 import axios from 'axios';
-import AddedAddress from '../reducers/address';
+axios.defaults.baseURL = `http://localhost:8000/api`;
 
 function addAddressAPI(data: { postnumber: number; name: string; address: string; defaultSet: boolean }) {
 	// return axios.post('address');
@@ -42,7 +45,21 @@ function* deleteAddress(action: ReturnType<typeof deleteAddressRequest>) {
 function* watchdeleteAddress() {
 	yield takeLatest(DELETE_ADDRESS_REQUEST, deleteAddress);
 }
+function loadAddressesAPI(lastId = 0) {
+	return axios.get(`/address?lastId=${lastId}`);
+}
+function* loadAddresses(action: ReturnType<typeof loadAddressesRequest>) {
+	try {
+		const result = yield call(loadAddressesAPI, action.payload);
+		yield put(loadAddressesSuccess(result.data));
+	} catch (e) {
+		console.error(e);
+	}
+}
+function* watchloadAddresses() {
+	yield takeLatest(LOAD_ADDRESSES_REQUEST, loadAddresses);
+}
 
 export default function* rootSaga() {
-	yield all([fork(watchAddAddress), fork(watchdeleteAddress)]);
+	yield all([fork(watchAddAddress), fork(watchdeleteAddress), fork(watchloadAddresses)]);
 }

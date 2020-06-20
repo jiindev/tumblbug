@@ -5,7 +5,8 @@ export const ADD_ADDRESS_SUCCESS = 'ADD_ADDRESS_SUCCESS' as const;
 export const SET_DEFAULT_ADDRESS = 'SET_DEFAULT_ADDRESS' as const;
 export const DELETE_ADDRESS_REQUEST = 'DELETE_ADDRESS_REQUEST' as const;
 export const DELETE_ADDRESS_SUCCESS = 'DELETE_ADDRESS_SUCCESS' as const;
-export const LOAD_ADDRESSES = 'LOAD_ADDRESSES' as const;
+export const LOAD_ADDRESSES_REQUEST = 'LOAD_ADDRESSES_REQUEST' as const;
+export const LOAD_ADDRESSES_SUCCESS = 'LOAD_ADDRESSES_SUCCESS' as const;
 
 export const addAddressRequest = (data: AddedAddress) => ({
 	type: ADD_ADDRESS_REQUEST,
@@ -27,9 +28,13 @@ export const deleteAddressSuccess = (id: number) => ({
 	type: DELETE_ADDRESS_SUCCESS,
 	payload: id,
 });
-export const loadAddresses = (lastId?: number) => ({
-	type: LOAD_ADDRESSES,
+export const loadAddressesRequest = (lastId?: number) => ({
+	type: LOAD_ADDRESSES_REQUEST,
 	payload: lastId,
+});
+export const loadAddressesSuccess = (data: { addresses: Address[]; hasMoreAddresses: boolean }) => ({
+	type: LOAD_ADDRESSES_SUCCESS,
+	payload: data,
 });
 
 type AddressAction =
@@ -38,7 +43,8 @@ type AddressAction =
 	| ReturnType<typeof setDefaultAddress>
 	| ReturnType<typeof deleteAddressRequest>
 	| ReturnType<typeof deleteAddressSuccess>
-	| ReturnType<typeof loadAddresses>;
+	| ReturnType<typeof loadAddressesRequest>
+	| ReturnType<typeof loadAddressesSuccess>;
 
 export type AddedAddress = {
 	postnumber: number;
@@ -104,14 +110,17 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 				hasMoreAddresses: addresses[addresses.length - 1] === addressesData[addressesData.length - 1] ? false : true,
 			};
 		}
-		case LOAD_ADDRESSES: {
-			const lastIndex = addressesData.findIndex((v) => v.id === action.payload);
-			const moreAddresses = addressesData.slice(lastIndex + 1, lastIndex + 6);
+		case LOAD_ADDRESSES_REQUEST: {
 			return {
 				...state,
-				addresses: state.addresses.concat(moreAddresses),
-				hasMoreAddresses:
-					moreAddresses[moreAddresses.length - 1] === addressesData[addressesData.length - 1] ? false : true,
+				addresses: !action.payload ? [] : [...state.addresses],
+			};
+		}
+		case LOAD_ADDRESSES_SUCCESS: {
+			return {
+				...state,
+				addresses: state.addresses.concat(action.payload.addresses),
+				hasMoreAddresses: action.payload.hasMoreAddresses,
 			};
 		}
 		default:
