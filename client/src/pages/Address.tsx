@@ -24,6 +24,7 @@ const AddressPage = memo(() => {
 
 	useEffect(() => {
 		loadAddresses();
+		resetToast();
 	}, []);
 
 	useEffect(() => {

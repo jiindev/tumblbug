@@ -30,14 +30,12 @@ function* watchAddAddress() {
 	yield takeLatest(ADD_ADDRESS_REQUEST, addAddress);
 }
 function deleteAddressAPI(id: number) {
-	// return axios.post('address');
-	console.log(id);
-	return id;
+	return axios.delete(`/address/${id}`);
 }
 function* deleteAddress(action: ReturnType<typeof deleteAddressRequest>) {
 	try {
 		const result = yield call(deleteAddressAPI, action.payload);
-		yield put(deleteAddressSuccess(result));
+		yield put(deleteAddressSuccess(result.data));
 	} catch (e) {
 		console.error(e);
 	}
