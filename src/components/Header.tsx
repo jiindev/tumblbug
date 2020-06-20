@@ -55,7 +55,6 @@ const TabList = styled.nav`
 `;
 
 const Tab = styled.li<TabPropsType>`
-	font-family: AppleSDGothicNeo;
 	font-size: 20px;
 	color: #999;
 	padding-bottom: 10px;

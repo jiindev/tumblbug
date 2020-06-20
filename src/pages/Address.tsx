@@ -5,11 +5,13 @@ import { Link } from 'react-router-dom';
 import useAddress from '../hooks/useAddress';
 import useDefaultAddress from '../hooks/useDefaultAddress';
 import useLoadAddresses from '../hooks/useLoadAddresses';
+import useHasMoreAddresses from '../hooks/useHasMoreAddresses';
 import AddressItem from '../components/AddressItem';
 import AddAddressModal from '../components/AddAddressModal';
 
 const AddressPage = memo(() => {
 	const addresses = useAddress();
+	const hasMoreAddresses = useHasMoreAddresses();
 	const defaultId = useDefaultAddress();
 	const [showAddModal, setShowAddModal] = useState(false);
 	const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === defaultId), [addresses, defaultId]);
@@ -67,7 +69,7 @@ const AddressPage = memo(() => {
 										return <AddressItem address={v} defaultSet={false} key={v.id} />;
 									})}
 							</ul>
-							<button onClick={onClickMore}>더보기</button>
+							{hasMoreAddresses && <MoreAddressButton onClick={onClickMore}>더보기</MoreAddressButton>}
 						</>
 					)}
 				</AddressDiv>
@@ -143,16 +145,6 @@ const AddressDiv = styled.div`
 	margin-bottom: 30px;
 	margin-left: -20px;
 	box-sizing: border-box;
-	& > button {
-		width: 100%;
-		background-color: transparent;
-		border: none;
-		padding: 15px 0;
-		cursor: pointer;
-		outline: none;
-		font-size: 16px;
-		color: #252525;
-	}
 	@media only screen and (min-width: 768px) {
 		width: 100%;
 		margin-left: 0;
@@ -162,6 +154,17 @@ const AddressDiv = styled.div`
 	@media only screen and (min-width: 1024px) {
 		max-width: 660px;
 	}
+`;
+const MoreAddressButton = styled.button`
+	width: 100%;
+	background-color: transparent;
+	border: none;
+	padding: 15px 0;
+	cursor: pointer;
+	outline: none;
+	font-size: 16px;
+	color: #252525;
+	border-top: 1px solid #979797;
 `;
 
 const NoAddress = styled.div`

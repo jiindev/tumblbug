@@ -37,10 +37,15 @@ export type Address = {
 
 type AddressesState = {
 	addresses: Address[];
+	hasMoreAddresses: boolean;
 	defaultId: number;
 };
 
-const initialState: AddressesState = { addresses: addressesData.slice(0, 5), defaultId: addressesData[0].id };
+const initialState: AddressesState = {
+	addresses: addressesData.slice(0, 5),
+	hasMoreAddresses: true,
+	defaultId: addressesData[0].id,
+};
 
 function address(state: AddressesState = initialState, action: AddressAction): AddressesState {
 	switch (action.type) {
@@ -68,7 +73,11 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 		case DELETE_ADDRESS: {
 			let addresses = [...state.addresses];
 			addresses = addresses.filter((address) => address.id !== action.payload);
-			return { ...state, addresses };
+			return {
+				...state,
+				addresses,
+				hasMoreAddresses: addresses[addresses.length - 1] === addressesData[addressesData.length - 1] ? false : true,
+			};
 		}
 		case LOAD_ADDRESSES: {
 			const lastIndex = addressesData.findIndex((v) => v.id === action.payload);
@@ -76,6 +85,8 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 			return {
 				...state,
 				addresses: state.addresses.concat(moreAddresses),
+				hasMoreAddresses:
+					moreAddresses[moreAddresses.length - 1] === addressesData[addressesData.length - 1] ? false : true,
 			};
 		}
 		default:

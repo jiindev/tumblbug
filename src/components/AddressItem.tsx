@@ -91,6 +91,9 @@ const AddressLi = styled.li`
 		font-weight: normal;
 		color: #989898;
 	}
+	&:last-child {
+		border: none;
+	}
 `;
 
 const MoreButton = styled.button`
