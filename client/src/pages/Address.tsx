@@ -1,26 +1,38 @@
-import React, { useEffect, useState, useCallback, useMemo, memo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, memo, useRef } from 'react';
 import Layout from '../components/Layout';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import useAddress from '../hooks/useAddress';
+import useToastSentence from '../hooks/useToastSentence';
 import useDefaultAddress from '../hooks/useDefaultAddress';
 import useLoadAddresses from '../hooks/useLoadAddresses';
 import useHasMoreAddresses from '../hooks/useHasMoreAddresses';
 import AddressItem from '../components/AddressItem';
 import AddAddressModal from '../components/AddAddressModal';
+import ToastMessage from '../components/ToastMessage';
+import useResetToast from '../hooks/useResetToast';
 
 const AddressPage = memo(() => {
 	const addresses = useAddress();
 	const hasMoreAddresses = useHasMoreAddresses();
+	const toastSentence = useToastSentence();
 	const defaultId = useDefaultAddress();
 	const [showAddModal, setShowAddModal] = useState(false);
 	const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === defaultId), [addresses, defaultId]);
+	const resetToast = useResetToast();
+	const loadAddresses = useLoadAddresses();
 
 	useEffect(() => {
 		loadAddresses();
 	}, []);
 
-	const loadAddresses = useLoadAddresses();
+	useEffect(() => {
+		if (toastSentence !== '') {
+			setTimeout(() => {
+				resetToast();
+			}, 3000);
+		}
+	}, [toastSentence]);
 
 	const onClickAdd = useCallback(() => {
 		setShowAddModal(true);
@@ -40,11 +52,7 @@ const AddressPage = memo(() => {
 				<H3>등록된 배송지</H3>
 				<span onClick={onClickAdd}>추가</span>
 			</Title>
-			{false && (
-				<ToastUI>
-					<div>기본 배송지가 변경되었습니다.</div>
-				</ToastUI>
-			)}
+			{toastSentence !== '' && <ToastMessage toastSentence={toastSentence} />}
 			{showAddModal && (
 				<>
 					<AddAddressModal onCloseAddModal={onCloseAddModal} />
@@ -89,32 +97,6 @@ const AddressPage = memo(() => {
 	);
 });
 
-const ToastUI = styled.div`
-	position: fixed;
-	top: 50%;
-	margin-top: -25px;
-	z-index: 20;
-	width: 100%;
-	box-sizing: border-box;
-	left: 0;
-	padding: 0 15px;
-	& > div {
-		padding: 15px 30px;
-		border-radius: 6px;
-		background-color: rgba(107, 107, 107, 0.7);
-		font-size: 22px;
-		font-weight: 600;
-		color: white;
-		max-width: 400px;
-		width: 100%;
-		box-sizing: border-box;
-		margin: 0 auto;
-		text-align: center;
-	}
-	@media only screen and (min-width: 1024px) {
-		flex-direction: row;
-	}
-`;
 const Contents = styled.div`
 	display: flex;
 	width: 100%;

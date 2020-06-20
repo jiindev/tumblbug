@@ -7,6 +7,7 @@ export const DELETE_ADDRESS_REQUEST = 'DELETE_ADDRESS_REQUEST' as const;
 export const DELETE_ADDRESS_SUCCESS = 'DELETE_ADDRESS_SUCCESS' as const;
 export const LOAD_ADDRESSES_REQUEST = 'LOAD_ADDRESSES_REQUEST' as const;
 export const LOAD_ADDRESSES_SUCCESS = 'LOAD_ADDRESSES_SUCCESS' as const;
+export const RESET_TOAST = 'RESET_TOAST' as const;
 
 export const addAddressRequest = (data: AddedAddress) => ({
 	type: ADD_ADDRESS_REQUEST,
@@ -36,6 +37,9 @@ export const loadAddressesSuccess = (data: { addresses: Address[]; hasMoreAddres
 	type: LOAD_ADDRESSES_SUCCESS,
 	payload: data,
 });
+export const resetToast = () => ({
+	type: RESET_TOAST,
+});
 
 type AddressAction =
 	| ReturnType<typeof addAddressRequest>
@@ -44,7 +48,8 @@ type AddressAction =
 	| ReturnType<typeof deleteAddressRequest>
 	| ReturnType<typeof deleteAddressSuccess>
 	| ReturnType<typeof loadAddressesRequest>
-	| ReturnType<typeof loadAddressesSuccess>;
+	| ReturnType<typeof loadAddressesSuccess>
+	| ReturnType<typeof resetToast>;
 
 export type AddedAddress = {
 	postnumber: number;
@@ -64,18 +69,20 @@ type AddressesState = {
 	addresses: Address[];
 	hasMoreAddresses: boolean;
 	defaultId: number;
+	toastSentence: string;
 };
 
 const initialState: AddressesState = {
 	addresses: [],
 	hasMoreAddresses: true,
 	defaultId: addressesData[0].id,
+	toastSentence: '',
 };
 
 function address(state: AddressesState = initialState, action: AddressAction): AddressesState {
 	switch (action.type) {
 		case ADD_ADDRESS_REQUEST: {
-			return state;
+			return { ...state };
 		}
 		case ADD_ADDRESS_SUCCESS: {
 			const nextId = Math.max(...state.addresses.map((address) => address.id)) + 1;
@@ -93,21 +100,29 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 		}
 		case SET_DEFAULT_ADDRESS: {
 			const defaultId = action.payload;
+			const toastSentence = '기본 배송지가 변경되었습니다.';
 			return {
 				...state,
 				defaultId,
+				toastSentence,
 			};
 		}
 		case DELETE_ADDRESS_REQUEST: {
-			return state;
+			return {
+				...state,
+			};
 		}
 		case DELETE_ADDRESS_SUCCESS: {
 			let addresses = [...state.addresses];
 			addresses = addresses.filter((address) => address.id !== action.payload);
+			const toastSentence = '삭제 완료 되었습니다.';
+			const hasMoreAddresses =
+				addresses[addresses.length - 1] === addressesData[addressesData.length - 1] ? false : true;
 			return {
 				...state,
 				addresses,
-				hasMoreAddresses: addresses[addresses.length - 1] === addressesData[addressesData.length - 1] ? false : true,
+				hasMoreAddresses,
+				toastSentence,
 			};
 		}
 		case LOAD_ADDRESSES_REQUEST: {
@@ -123,8 +138,15 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 				hasMoreAddresses: action.payload.hasMoreAddresses,
 			};
 		}
+		case RESET_TOAST: {
+			const toastSentence = '';
+			return {
+				...state,
+				toastSentence,
+			};
+		}
 		default:
-			return state;
+			return { ...state };
 	}
 }
 
