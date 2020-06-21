@@ -1,6 +1,6 @@
 ## 텀블벅 과제 프로젝트
 
-프론트는 create-react-app으로 초기 셋팅을 하고 진행했습니다. 백엔드는 express를 이용하여 셋팅했습니다. <br/>백엔드는 텀블벅에서 제시해 주신 주소 데이터 파일(addresses.json)과 기본 배송지 데이터 파일(default.json)을 불러들여 동작하며, <br/>기본 배송지 수정/배송지 추가/배송지 삭제 시 해당 데이터 파일의 내용이 변경되도록 설계했습니다. <br/>따라서 사이트 동작을 통해 데이터를 수정했을 시 텀블벅에서 주신 기본 데이터 파일의 내용과 상이해질 수 있으니 이 점 양해 부탁드립니다.
+프론트는 create-react-app으로 초기 셋팅을 하고 진행했습니다. 백엔드는 express를 이용하여 셋팅했습니다. <br/>백엔드는 텀블벅에서 제시해 주신 주소 데이터 파일(addresses.json)을 불러들여 동작하며, <br/>기본 배송지 수정/배송지 추가/배송지 삭제 시 해당 데이터 파일의 내용이 변경되도록 설계했습니다. <br/>따라서 사이트 동작을 통해 데이터를 수정했을 시 텀블벅에서 주신 기본 데이터 파일의 내용과 상이해질 수 있으니 이 점 양해 부탁드립니다.
 
 ## 서버 구동
 
@@ -57,7 +57,7 @@ client
 back
 ├── node_modules
 ├── src
-│   ├── ㅁ data        : 데이터 폴더 (addresses, defaultId)
+│   ├── ㅁ data        : 데이터 폴더 (addresses.json)
 │   ├── ㅁ routes      : 라우트 폴더
 │   ├── index.tsx
 │   └── Server.tsx
@@ -182,11 +182,11 @@ const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === de
 
 ### GET /address/default API
 
-기본 배송지로 설정된 배송지의 id값을 가져오는 API입니다. <br/>default.json 파일에 적힌 defaultId값을 읽어 res.json으로 전달합니다.
+기본 배송지로 설정된 배송지의 id값을 가져오는 API입니다. <br/>addresses.json 파일에 적힌 default값을 읽어 res.json으로 전달합니다.
 
 ### PUT /address/default API
 
-기본 배송지 id값을 변경하는 API입니다. <br/>id값을 프론트로부터 전달받으면 default.json 파일의 defaultId값을 해당 id값으로 수정하고 id값을 res.json으로 반환합니다.
+기본 배송지 id값을 변경하는 API입니다. <br/>id값을 프론트로부터 전달받으면 addresses.json 파일의 default값을 해당 id값으로 수정하고 id값을 res.json으로 반환합니다.
 
 ## 얻어가는 것
 

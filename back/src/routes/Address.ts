@@ -64,10 +64,9 @@ router.delete("/:id", async (req: Request, res: Response) => {
   });
 });
 router.get("/default", async (req: Request, res: Response) => {
-  const defaultFile = path.join(__dirname, "..", "data", "default.json");
-  fs.readFile(defaultFile, "utf8", (err: any, data: any) => {
+  fs.readFile(addressesFile, "utf8", (err: any, data: any) => {
     try {
-      const defaultData = JSON.parse(data).defaultAddressId;
+      const defaultData = JSON.parse(data).default;
       return res.json(defaultData);
     } catch (err) {
       console.error(err);
@@ -75,13 +74,12 @@ router.get("/default", async (req: Request, res: Response) => {
   });
 });
 router.put("/default", async (req: Request, res: Response) => {
-  const defaultFile = path.join(__dirname, "..", "data", "default.json");
-  fs.readFile(defaultFile, "utf8", (err: any, data: any) => {
+  fs.readFile(addressesFile, "utf8", (err: any, data: any) => {
     try {
-      const defaultData = JSON.parse(data);
-      defaultData.defaultAddressId = req.body.data;
+      let parsedData = JSON.parse(data);
+      parsedData.default = req.body.data;
 
-      fs.writeFile(defaultFile, JSON.stringify(defaultData), (err: any) => {
+      fs.writeFile(addressesFile, JSON.stringify(parsedData), (err: any) => {
         if (err) throw err;
         return res.json(req.body.data);
       });
