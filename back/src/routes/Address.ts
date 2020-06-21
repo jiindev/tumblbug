@@ -26,14 +26,21 @@ router.get("/", async (req: Request, res: Response) => {
   });
 });
 router.post("/", async (req: Request, res: Response) => {
-  const addedData = req.body;
   fs.readFile(addressesFile, "utf8", (err: any, data: any) => {
     try {
       let parsedData = JSON.parse(data);
-      parsedData.addresses.unshift(addedData);
+      const nextId =
+        Math.max(...parsedData.addresses.map((address: any) => address.id)) + 1;
+      const newData = {
+        id: nextId,
+        postnumber: req.body.postnumber,
+        name: req.body.name,
+        address: req.body.address,
+      };
+      parsedData.addresses.unshift(newData);
       fs.writeFile(addressesFile, JSON.stringify(parsedData), (err: any) => {
         if (err) throw err;
-        res.json(addedData);
+        res.json(newData);
       });
     } catch (err) {
       console.error(err);

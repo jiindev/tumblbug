@@ -26,6 +26,9 @@ function* addAddress(action: ReturnType<typeof addAddressRequest>) {
 	try {
 		const result = yield call(addAddressAPI, action.payload);
 		yield put(addAddressSuccess(result.data));
+		if (action.payload.defaultSet) {
+			yield put(setDefaultRequest(result.data.id));
+		}
 	} catch (e) {
 		console.error(e);
 	}

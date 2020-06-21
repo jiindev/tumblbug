@@ -25,14 +25,6 @@ const ToastMessage = memo(({ toastSentence }: ToastMessageProps) => {
 	);
 });
 
-export const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
 export const fadeOut = keyframes`
   from {
     opacity: 1;
@@ -51,7 +43,6 @@ const ToastUI = styled.div`
 	left: 0;
 	padding: 0 15px;
 	transition: all 1.5s ease;
-	animation: ${fadeIn} 1.5s;
 	pointer-events: none;
 	&.disappear {
 		animation: ${fadeOut} 1.5s;

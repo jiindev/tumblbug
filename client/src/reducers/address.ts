@@ -16,7 +16,7 @@ export const addAddressRequest = (data: AddedAddress) => ({
 	type: ADD_ADDRESS_REQUEST,
 	payload: data,
 });
-export const addAddressSuccess = (data: AddedAddress) => ({
+export const addAddressSuccess = (data: Address) => ({
 	type: ADD_ADDRESS_SUCCESS,
 	payload: data,
 });
@@ -102,17 +102,9 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 			return { ...state };
 		}
 		case ADD_ADDRESS_SUCCESS: {
-			const nextId = Math.max(...state.addresses.map((address) => address.id)) + 1;
-			let newAddress = {
-				id: nextId,
-				postnumber: action.payload.postnumber,
-				name: action.payload.name,
-				address: action.payload.address,
-			};
 			return {
 				...state,
-				addresses: [newAddress, ...state.addresses],
-				defaultId: action.payload.defaultSet ? nextId : state.defaultId,
+				addresses: [action.payload, ...state.addresses],
 			};
 		}
 		case GET_DEFAULT_REQUEST: {
