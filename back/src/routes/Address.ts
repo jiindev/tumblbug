@@ -13,8 +13,9 @@ router.get("/", async (req: Request, res: Response) => {
       const moreAddresses = addressesData.slice(index + 1, index + 6);
       let hasMoreAddresses = true;
       if (
+        moreAddresses.length < 1 ||
         moreAddresses[moreAddresses.length - 1].id ===
-        addressesData[addressesData.length - 1].id
+          addressesData[addressesData.length - 1].id
       ) {
         hasMoreAddresses = false;
       }
@@ -25,20 +26,35 @@ router.get("/", async (req: Request, res: Response) => {
   });
 });
 router.post("/", async (req: Request, res: Response) => {
-  return res.send("post");
+  const addedData = req.body;
+  fs.readFile(addressesFile, "utf8", (err: any, data: any) => {
+    try {
+      let parsedData = JSON.parse(data);
+      parsedData.addresses.unshift(addedData);
+      fs.writeFile(addressesFile, JSON.stringify(parsedData), (err: any) => {
+        if (err) throw err;
+        res.json(addedData);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  });
 });
 router.delete("/:id", async (req: Request, res: Response) => {
   const deleteId = parseInt("" + req.params.id, 10);
   fs.readFile(addressesFile, "utf8", (err: any, data: any) => {
-    let parsedData = JSON.parse(data);
-    let index = parsedData.addresses.findIndex((v: any) => v.id === deleteId);
-    parsedData.addresses.splice(index, 1);
+    try {
+      let parsedData = JSON.parse(data);
+      let index = parsedData.addresses.findIndex((v: any) => v.id === deleteId);
+      parsedData.addresses.splice(index, 1);
 
-    fs.writeFile(addressesFile, JSON.stringify(parsedData), (err: any) => {
-      if (err) throw err;
-      console.log("바꿨음 ㅎ");
-      res.send(req.params.id);
-    });
+      fs.writeFile(addressesFile, JSON.stringify(parsedData), (err: any) => {
+        if (err) throw err;
+        res.send(req.params.id);
+      });
+    } catch (err) {
+      console.error(err);
+    }
   });
 });
 

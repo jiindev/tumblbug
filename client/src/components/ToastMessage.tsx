@@ -1,17 +1,23 @@
 import React, { memo, useRef, useEffect, useCallback, useState, ChangeEvent, FormEvent } from 'react';
 import styled, { keyframes } from 'styled-components';
-import useAddAddress from '../hooks/useAddAddress';
 type ToastMessageProps = {
 	toastSentence: string;
 };
 
 const ToastMessage = memo(({ toastSentence }: ToastMessageProps) => {
 	const toastRef = useRef<HTMLDivElement>(null);
+	const timeout = useRef<any>(null);
+
 	useEffect(() => {
-		setTimeout(() => {
+		clearTimeout(timeout.current);
+		toastRef.current && toastRef.current.classList.remove('disappear');
+		timeout.current = setTimeout(() => {
 			toastRef.current && toastRef.current.classList.add('disappear');
 		}, 1500);
-	}, [toastRef.current]);
+		return () => {
+			clearTimeout(timeout.current);
+		};
+	}, [toastSentence]);
 	return (
 		<ToastUI ref={toastRef}>
 			<div>{toastSentence}</div>
@@ -46,6 +52,7 @@ const ToastUI = styled.div`
 	padding: 0 15px;
 	transition: all 1.5s ease;
 	animation: ${fadeIn} 1.5s;
+	pointer-events: none;
 	&.disappear {
 		animation: ${fadeOut} 1.5s;
 		opacity: 0;

@@ -21,6 +21,7 @@ const AddressPage = memo(() => {
 	const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === defaultId), [addresses, defaultId]);
 	const resetToast = useResetToast();
 	const loadAddresses = useLoadAddresses();
+	const timeout = useRef<any>(null);
 
 	useEffect(() => {
 		loadAddresses();
@@ -29,7 +30,8 @@ const AddressPage = memo(() => {
 
 	useEffect(() => {
 		if (toastSentence !== '') {
-			setTimeout(() => {
+			clearTimeout(timeout.current);
+			timeout.current = setTimeout(() => {
 				resetToast();
 			}, 3000);
 		}

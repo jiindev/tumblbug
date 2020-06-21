@@ -14,14 +14,12 @@ import axios from 'axios';
 axios.defaults.baseURL = `http://localhost:8000/api`;
 
 function addAddressAPI(data: { postnumber: number; name: string; address: string; defaultSet: boolean }) {
-	// return axios.post('address');
-	console.log(data);
-	return data;
+	return axios.post('/address', data);
 }
 function* addAddress(action: ReturnType<typeof addAddressRequest>) {
 	try {
 		const result = yield call(addAddressAPI, action.payload);
-		yield put(addAddressSuccess(result));
+		yield put(addAddressSuccess(result.data));
 	} catch (e) {
 		console.error(e);
 	}
