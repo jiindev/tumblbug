@@ -15,7 +15,7 @@ cd back
 
 npm i
 
-npm run start:dev
+npm run start
 ```
 
 #### 프론트
@@ -59,8 +59,7 @@ back
 ├── src
 │   ├── ㅁ data        : 데이터 폴더 (addresses.json)
 │   ├── ㅁ routes      : 라우트 폴더
-│   ├── index.tsx
-│   └── Server.tsx
+│   └── index.tsx
 ├── .gitignore
 ├── package.json
 ├── package-lock.json
