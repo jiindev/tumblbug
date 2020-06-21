@@ -4,6 +4,9 @@ import useAddAddress from '../hooks/useAddAddress';
 type AddAddressModalProps = {
 	onCloseAddModal: () => void;
 };
+type CheckboxProps = {
+	checked: boolean;
+};
 
 const AddAddressModal = memo(({ onCloseAddModal }: AddAddressModalProps) => {
 	const [name, setName] = useState('');
@@ -105,8 +108,14 @@ const AddAddressModal = memo(({ onCloseAddModal }: AddAddressModalProps) => {
 							<span>{addressError}</span>
 						</div>
 					</div>
-					<input type="checkbox" name="defaultAddress" onChange={onChangeDefaultSet} />
-					<label htmlFor="defaultAddress">기본 배송지로 등록</label>
+					<Checkbox checked={defaultSet}>
+						<label htmlFor="defaultAddress">
+							<input type="checkbox" id="defaultAddress" name="defaultAddress" onChange={onChangeDefaultSet} />
+							<span />
+							기본 배송지로 등록
+						</label>
+					</Checkbox>
+
 					<button type="submit">등록 완료</button>
 				</AddForm>
 			</AddModal>
@@ -188,11 +197,6 @@ const AddForm = styled.form`
 	& .address span {
 		margin-bottom: 10px;
 	}
-	& label {
-		font-size: 14px;
-		color: #3d3d3d;
-		margin-left: 5px;
-	}
 	& button {
 		border-radius: 4px;
 		background-color: #ed635e;
@@ -205,6 +209,7 @@ const AddForm = styled.form`
 		cursor: white;
 		margin-top: 60px;
 	}
+
 	@media only screen and (min-width: 768px) {
 		& > div {
 			flex-direction: row;
@@ -218,6 +223,41 @@ const AddForm = styled.form`
 		}
 	}
 `;
+
+const Checkbox = styled.div<CheckboxProps>`
+	& input[type='checkbox'] {
+		display: none;
+	}
+	& label {
+		font-size: 14px;
+		color: #3d3d3d;
+		cursor: pointer;
+	}
+	& span {
+		content: '';
+		vertical-align: middle;
+		width: 20px;
+		height: 20px;
+		margin: 0;
+		margin-right: 5px;
+		display: inline-block;
+		border-radius: 4px;
+		border: solid 1px #979797;
+		position: relative;
+		&:after {
+			position: absolute;
+			border-radius: 3px;
+			width: 16px;
+			height: 16px;
+			top: 2px;
+			left: 2px;
+			display: inline-block;
+			background-color: ${(props) => (props.checked ? '#ed635e' : 'white')};
+			content: '';
+		}
+	}
+`;
+
 const CloseButton = styled.span`
 	width: 20px;
 	height: 20px;

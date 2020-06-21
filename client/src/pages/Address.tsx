@@ -95,7 +95,7 @@ const AddressPage = memo(() => {
 					<InfoH3>배송지를 삭제하면 예약된 후원의 배송지 정보도 삭제되나요?</InfoH3>
 					<p>
 						현재 후원하신 프로젝트에 등록된 배송지가 삭제되거나 변경되지 않습니다. 이를 변경하시려면 후원현황에서
-						변경해주세요. <Link to="#">내 후원현황 바로가기</Link>
+						변경해주세요. <span>내 후원현황 바로가기</span>
 					</p>
 				</InfoDiv>
 			</Contents>
@@ -108,12 +108,16 @@ const Contents = styled.div`
 	width: 100%;
 	align-items: flex-start;
 	flex-direction: column;
+	padding-bottom: 50px;
+	@media only screen and (min-width: 768px) {
+		padding-bottom: 90px;
+	}
 	@media only screen and (min-width: 1024px) {
 		flex-direction: row;
 	}
 `;
 
-const Title = styled.div`
+export const Title = styled.div`
 	padding: 55px 0 20px 0;
 	display: flex;
 	justify-content: space-between;
@@ -123,9 +127,15 @@ const Title = styled.div`
 		text-decoration: underline;
 		cursor: pointer;
 	}
+	@media only screen and (min-width: 768px) {
+		width: 100%;
+	}
+	@media only screen and (min-width: 1024px) {
+		max-width: 660px;
+	}
 `;
 
-const H3 = styled.h3`
+export const H3 = styled.h3`
 	font-size: 20px;
 	font-weight: 600;
 	color: #3e3e3e;
@@ -202,7 +212,7 @@ const InfoDiv = styled(AddressDiv)`
 		line-height: 1.54;
 		color: #989898;
 		font-size: 13px;
-		& a {
+		& span {
 			color: #4ea3f8;
 			text-decoration: underline;
 		}
