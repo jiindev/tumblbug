@@ -6,6 +6,8 @@
 
 백엔드에서 데이터를 처리하여 이를 기반으로 진행되기 때문에 <br/>백엔드 서버를 먼저 구동시킨 뒤 프론트를 구동해주시길 바랍니다.
 
+백엔드 서버 : http://localhost:8000/
+
 ```
 cd back
 
@@ -16,12 +18,54 @@ npm run start:dev
 
 #### 프론트 구동
 
+프론트 서버 : http://localhost:3000/
+
 ```
 cd client
 
 npm i
 
 npm start
+```
+
+### 폴더 구조
+
+```
+client
+├── node_modules
+├── public
+├── src
+│   ├── ㅁ components  : 컴포넌트 폴더
+│   ├── ㅁ hooks       : 커스텀 훅 폴더
+│   ├── ㅁ module      : 리덕스 폴더
+│   ├── ㅁ pages       : 페이지 폴더 (route)
+│   ├── ㅁ saga        : 리덕스 사가 폴더
+│   ├── ㅁ styles      : 스타일 폴더 (global-styles)
+│   ├── App.tsx
+│   ├── index.tsx
+│   └── Router.tsx     : 라우터 설정 파일
+├── .eslint.json
+├── .gitignore
+├── .prettierrc.json
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── yarn.lock
+
+back
+├── node_modules
+├── src
+│   ├── ㅁ data        : 데이터 폴더
+│   ├── ㅁ routes      : 라우트 폴더
+│   ├── index.tsx
+│   └── Server.tsx
+├── .eslint.json
+├── .gitignore
+├── .prettierrc.json
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── yarn.lock
 ```
 
 ### 스타일링
@@ -138,3 +182,12 @@ const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === de
 ### PUT /address/default API
 
 기본 배송지 id값을 변경하는 API입니다. <br/>id값을 프론트로부터 전달받으면 default.json 파일의 defaultId값을 해당 id값으로 수정하고 id값을 res.json으로 반환합니다.
+
+## 얻어가는 것
+
+1. 타입스크립트
+   타입스크립트의 대략적인 개념만 알고 타입스크립트를 써야 할 필요성 등에 대해 자세히 인지하지 못했는데, 이번 프로젝트를 진행하면서 타입스크립트를 직접 사용해보고, 타입스크립트를 사용함으로써 오는 이점을 경험해볼 수 있었습니다. 처음엔 타입스크립트 사용이 막막하게만 느껴졌는데, 문제를 해결하고 개선하는 과정에서 타입스크립트에 관심을 갖게 되었으며 제 자신이 성장할 수 있는 계기가 된것 같습니다. 프로젝트 제출 이후 타입스크립트에 대해서 본격적으로 공부해 볼 생각입니다.
+
+2. 기존에 토이프로젝트를 할 때엔 원하는 UI 및 기능이 구현되지 않을 경우 이를 구현하기 쉬운 방향으로 다듬어가며 진행했는데, 기재된 내용 그대로 구현하고자 하니 그 과정에서 여러가지 문제점에 부딪혔습니다. 이를 온전하게 구현하기 위한 문제해결과정에서 어떤 식으로 응용하여 기능을 구현할 수 있는지, 오류가 나타났을 경우 이를 어떤 키워드로 검색해야 원하는 답을 찾기에 용이한지 등 많은 것을 배웠습니다.
+
+3. REST API를 노드서버로 구현하라는 문장을 뒤늦게 확인하여 마감일에 맞추기 위해서 시간과 목표치를 정하여 이전보다 체계적으로 작업을 진행했습니다. 결국 정해진 시간 내에 제가 원하는 기능을 구현해낼 수 있었습니다. 데드라인이 정해진 작업을 경험해볼 수 있었고, 짧은 시간동안 빠르게 원하는 것을 구현해내면서 이 과정에서 많은 것을 경험하고 배울 수 있었습니다.
