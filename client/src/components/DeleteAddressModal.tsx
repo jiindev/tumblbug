@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { Dim } from './AddAddressModal';
 
 type DeleteModalProps = {
-	onDelete: () => void;
+	deleteAddress: () => void;
 	onCloseDeleteModal: () => void;
 };
 
-const DeleteAddressModal = memo(({ onDelete, onCloseDeleteModal }: DeleteModalProps) => {
+const DeleteAddressModal = memo(({ deleteAddress, onCloseDeleteModal }: DeleteModalProps) => {
 	useEffect(() => {
 		document.body.style.cssText = `position: fixed; top: -${window.scrollY}px; width: 100%;`;
 		return () => {
@@ -23,7 +23,7 @@ const DeleteAddressModal = memo(({ onDelete, onCloseDeleteModal }: DeleteModalPr
 			<CheckModal>
 				<p>정말 삭제하시겠습니까?</p>
 				<div className="buttons">
-					<button onClick={onDelete}>확인</button>
+					<button onClick={deleteAddress}>확인</button>
 					<button onClick={onCloseDeleteModal}>취소</button>
 				</div>
 			</CheckModal>

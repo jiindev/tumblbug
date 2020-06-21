@@ -1,5 +1,3 @@
-import { addresses } from '../data/addresses.json';
-const addressesData = addresses;
 export const ADD_ADDRESS_REQUEST = 'ADD_ADDRESS_REQUEST' as const;
 export const ADD_ADDRESS_SUCCESS = 'ADD_ADDRESS_SUCCESS' as const;
 export const GET_DEFAULT_REQUEST = 'GET_DEFAULT_REQUEST' as const;

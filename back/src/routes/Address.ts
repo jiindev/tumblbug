@@ -9,8 +9,7 @@ router.get("/", async (req: Request, res: Response) => {
   fs.readFile(addressesFile, "utf8", (err: any, data: any) => {
     try {
       const addressesData = JSON.parse(data).addresses;
-      const index = addressesData.findIndex((v: any) => v.id === lastId);
-      const moreAddresses = addressesData.slice(index + 1, index + 6);
+      const moreAddresses = addressesData.slice(lastId, lastId + 5);
       let hasMoreAddresses = true;
       if (
         moreAddresses.length < 1 ||

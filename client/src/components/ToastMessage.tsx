@@ -1,4 +1,4 @@
-import React, { memo, useRef, useEffect, useCallback, useState, ChangeEvent, FormEvent } from 'react';
+import React, { memo, useRef, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 type ToastMessageProps = {
 	toastSentence: string;
@@ -44,8 +44,8 @@ const ToastUI = styled.div`
 	padding: 0 15px;
 	transition: all 1.5s ease;
 	pointer-events: none;
+	opacity: 1;
 	&.disappear {
-		animation: ${fadeOut} 1.5s;
 		opacity: 0;
 	}
 	& > div {

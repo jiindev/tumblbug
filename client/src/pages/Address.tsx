@@ -1,35 +1,30 @@
 import React, { useEffect, useState, useCallback, useMemo, memo, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import Layout from '../components/Layout';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import useAddress from '../hooks/useAddress';
-import useToastSentence from '../hooks/useToastSentence';
-import useDefaultAddress from '../hooks/useDefaultAddress';
 import useLoadAddresses from '../hooks/useLoadAddresses';
-import useHasMoreAddresses from '../hooks/useHasMoreAddresses';
 import AddressItem from '../components/AddressItem';
 import AddAddressModal from '../components/AddAddressModal';
 import ToastMessage from '../components/ToastMessage';
 import useResetToast from '../hooks/useResetToast';
 import useGetDefault from '../hooks/useGetDefault';
+import { RootState } from '../module';
 
 const AddressPage = memo(() => {
-	const addresses = useAddress();
-	const hasMoreAddresses = useHasMoreAddresses();
-	const toastSentence = useToastSentence();
-	const defaultId = useDefaultAddress();
+	const { addresses, defaultId, hasMoreAddresses, toastSentence } = useSelector((state: RootState) => state.address);
 	const [showAddModal, setShowAddModal] = useState(false);
 	const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === defaultId), [addresses, defaultId]);
+	const timeout = useRef<any>(null);
+
 	const resetToast = useResetToast();
 	const loadAddresses = useLoadAddresses();
 	const getDefault = useGetDefault();
-	const timeout = useRef<any>(null);
 
 	useEffect(() => {
 		loadAddresses();
 		resetToast();
 		getDefault();
-	}, []);
+	}, [loadAddresses, resetToast, getDefault]);
 
 	useEffect(() => {
 		if (toastSentence !== '') {
@@ -38,14 +33,14 @@ const AddressPage = memo(() => {
 				resetToast();
 			}, 3000);
 		}
-	}, [toastSentence]);
+	}, [toastSentence, resetToast]);
 
 	const onClickAdd = useCallback(() => {
 		setShowAddModal(true);
 	}, []);
 
 	const onClickMore = useCallback(() => {
-		loadAddresses(addresses[0] && addresses[addresses.length - 1].id);
+		loadAddresses(addresses[0] && addresses.length);
 	}, [loadAddresses, addresses]);
 
 	const onCloseAddModal = useCallback(() => {

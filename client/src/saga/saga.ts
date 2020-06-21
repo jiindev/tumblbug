@@ -1,4 +1,4 @@
-import { takeEvery, put, delay, all, fork, takeLatest, call } from 'redux-saga/effects';
+import { put, all, fork, takeLatest, call } from 'redux-saga/effects';
 import {
 	ADD_ADDRESS_REQUEST,
 	addAddressSuccess,
@@ -15,7 +15,7 @@ import {
 	setDefaultRequest,
 	setDefaultSuccess,
 	SET_DEFAULT_REQUEST,
-} from '../reducers/address';
+} from '../module/address';
 import axios from 'axios';
 axios.defaults.baseURL = `http://localhost:8000/api`;
 

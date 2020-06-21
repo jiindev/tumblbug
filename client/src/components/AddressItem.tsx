@@ -1,6 +1,6 @@
 import React, { memo, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { Address } from '../reducers/address';
+import { Address } from '../module/address';
 import useAddressActions from '../hooks/useAddressActions';
 import DeleteAddressModal from './DeleteAddressModal';
 import MoreLayer from './MoreLayer';
@@ -13,14 +13,14 @@ type AddressItemProps = {
 const AddressItem = memo(({ address, defaultSet }: AddressItemProps) => {
 	const [showMoreLayer, setShowMoreLayer] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
-	const { onDelete, onSetDefault } = useAddressActions(address.id);
+	const { deleteAddress, setDefault } = useAddressActions(address.id);
 	const onClickMoreButton = useCallback(() => {
 		setShowMoreLayer(true);
 	}, []);
 	const onClickDefaultButton = useCallback(() => {
-		onSetDefault();
+		setDefault();
 		setShowMoreLayer(false);
-	}, [onSetDefault]);
+	}, [setDefault]);
 	const onShowDeleteModal = useCallback(() => {
 		setShowDeleteModal(true);
 	}, []);
@@ -39,7 +39,7 @@ const AddressItem = memo(({ address, defaultSet }: AddressItemProps) => {
 		<>
 			{showDeleteModal && (
 				<>
-					<DeleteAddressModal onDelete={onDelete} onCloseDeleteModal={onCloseDeleteModal} />
+					<DeleteAddressModal deleteAddress={deleteAddress} onCloseDeleteModal={onCloseDeleteModal} />
 				</>
 			)}
 			<AddressLi>

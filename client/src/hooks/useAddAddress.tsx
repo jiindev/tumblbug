@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useCallback } from 'react';
-import { addAddressRequest } from '../reducers/address';
+import { addAddressRequest } from '../module/address';
 
 export default function useAddAddress() {
 	const dispatch = useDispatch();
