@@ -9,6 +9,12 @@ import {
 	loadAddressesSuccess,
 	loadAddressesRequest,
 	LOAD_ADDRESSES_REQUEST,
+	getDefaultRequest,
+	getDefaultSuccess,
+	GET_DEFAULT_REQUEST,
+	setDefaultRequest,
+	setDefaultSuccess,
+	SET_DEFAULT_REQUEST,
 } from '../reducers/address';
 import axios from 'axios';
 axios.defaults.baseURL = `http://localhost:8000/api`;
@@ -55,7 +61,41 @@ function* loadAddresses(action: ReturnType<typeof loadAddressesRequest>) {
 function* watchloadAddresses() {
 	yield takeLatest(LOAD_ADDRESSES_REQUEST, loadAddresses);
 }
+function getDefaultAPI() {
+	return axios.get(`/address/default`);
+}
+function* getDefault(action: ReturnType<typeof getDefaultRequest>) {
+	try {
+		const result = yield call(getDefaultAPI);
+		yield put(getDefaultSuccess(result.data));
+	} catch (e) {
+		console.error(e);
+	}
+}
+function* watchGetDefault() {
+	yield takeLatest(GET_DEFAULT_REQUEST, getDefault);
+}
+function setDefaultAPI(data: number) {
+	return axios.put(`/address/default`, { data });
+}
+function* setDefault(action: ReturnType<typeof setDefaultRequest>) {
+	try {
+		const result = yield call(setDefaultAPI, action.payload);
+		yield put(setDefaultSuccess(result.data));
+	} catch (e) {
+		console.error(e);
+	}
+}
+function* watchSetDefault() {
+	yield takeLatest(SET_DEFAULT_REQUEST, setDefault);
+}
 
 export default function* rootSaga() {
-	yield all([fork(watchAddAddress), fork(watchdeleteAddress), fork(watchloadAddresses)]);
+	yield all([
+		fork(watchAddAddress),
+		fork(watchdeleteAddress),
+		fork(watchloadAddresses),
+		fork(watchGetDefault),
+		fork(watchSetDefault),
+	]);
 }

@@ -50,7 +50,34 @@ router.delete("/:id", async (req: Request, res: Response) => {
 
       fs.writeFile(addressesFile, JSON.stringify(parsedData), (err: any) => {
         if (err) throw err;
-        res.send(req.params.id);
+        return res.send(req.params.id);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  });
+});
+router.get("/default", async (req: Request, res: Response) => {
+  const defaultFile = path.join(__dirname, "..", "data", "default.json");
+  fs.readFile(defaultFile, "utf8", (err: any, data: any) => {
+    try {
+      const defaultData = JSON.parse(data).defaultAddressId;
+      return res.json(defaultData);
+    } catch (err) {
+      console.error(err);
+    }
+  });
+});
+router.put("/default", async (req: Request, res: Response) => {
+  const defaultFile = path.join(__dirname, "..", "data", "default.json");
+  fs.readFile(defaultFile, "utf8", (err: any, data: any) => {
+    try {
+      const defaultData = JSON.parse(data);
+      defaultData.defaultAddressId = req.body.data;
+
+      fs.writeFile(defaultFile, JSON.stringify(defaultData), (err: any) => {
+        if (err) throw err;
+        return res.json(req.body.data);
       });
     } catch (err) {
       console.error(err);

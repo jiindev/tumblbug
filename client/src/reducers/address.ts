@@ -2,7 +2,10 @@ import { addresses } from '../data/addresses.json';
 const addressesData = addresses;
 export const ADD_ADDRESS_REQUEST = 'ADD_ADDRESS_REQUEST' as const;
 export const ADD_ADDRESS_SUCCESS = 'ADD_ADDRESS_SUCCESS' as const;
-export const SET_DEFAULT_ADDRESS = 'SET_DEFAULT_ADDRESS' as const;
+export const GET_DEFAULT_REQUEST = 'GET_DEFAULT_REQUEST' as const;
+export const GET_DEFAULT_SUCCESS = 'GET_DEFAULT_SUCCESS' as const;
+export const SET_DEFAULT_REQUEST = 'SET_DEFAULT_REQUEST' as const;
+export const SET_DEFAULT_SUCCESS = 'SET_DEFAULT_SUCCESS' as const;
 export const DELETE_ADDRESS_REQUEST = 'DELETE_ADDRESS_REQUEST' as const;
 export const DELETE_ADDRESS_SUCCESS = 'DELETE_ADDRESS_SUCCESS' as const;
 export const LOAD_ADDRESSES_REQUEST = 'LOAD_ADDRESSES_REQUEST' as const;
@@ -17,8 +20,19 @@ export const addAddressSuccess = (data: AddedAddress) => ({
 	type: ADD_ADDRESS_SUCCESS,
 	payload: data,
 });
-export const setDefaultAddress = (id: number) => ({
-	type: SET_DEFAULT_ADDRESS,
+export const getDefaultRequest = () => ({
+	type: GET_DEFAULT_REQUEST,
+});
+export const getDefaultSuccess = (id: number) => ({
+	type: GET_DEFAULT_SUCCESS,
+	payload: id,
+});
+export const setDefaultRequest = (id: number) => ({
+	type: SET_DEFAULT_REQUEST,
+	payload: id,
+});
+export const setDefaultSuccess = (id: number) => ({
+	type: SET_DEFAULT_SUCCESS,
 	payload: id,
 });
 export const deleteAddressRequest = (id: number) => ({
@@ -44,7 +58,10 @@ export const resetToast = () => ({
 type AddressAction =
 	| ReturnType<typeof addAddressRequest>
 	| ReturnType<typeof addAddressSuccess>
-	| ReturnType<typeof setDefaultAddress>
+	| ReturnType<typeof getDefaultRequest>
+	| ReturnType<typeof getDefaultSuccess>
+	| ReturnType<typeof setDefaultRequest>
+	| ReturnType<typeof setDefaultSuccess>
 	| ReturnType<typeof deleteAddressRequest>
 	| ReturnType<typeof deleteAddressSuccess>
 	| ReturnType<typeof loadAddressesRequest>
@@ -75,7 +92,7 @@ type AddressesState = {
 const initialState: AddressesState = {
 	addresses: [],
 	hasMoreAddresses: true,
-	defaultId: addressesData[0].id,
+	defaultId: 0,
 	toastSentence: '',
 };
 
@@ -98,7 +115,20 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 				defaultId: action.payload.defaultSet ? nextId : state.defaultId,
 			};
 		}
-		case SET_DEFAULT_ADDRESS: {
+		case GET_DEFAULT_REQUEST: {
+			return { ...state };
+		}
+		case GET_DEFAULT_SUCCESS: {
+			const defaultId = action.payload;
+			return {
+				...state,
+				defaultId,
+			};
+		}
+		case SET_DEFAULT_REQUEST: {
+			return { ...state };
+		}
+		case SET_DEFAULT_SUCCESS: {
 			const defaultId = action.payload;
 			const toastSentence = '기본 배송지가 변경되었습니다.';
 			return {
@@ -116,12 +146,9 @@ function address(state: AddressesState = initialState, action: AddressAction): A
 			let addresses = [...state.addresses];
 			addresses = addresses.filter((address) => address.id !== action.payload);
 			const toastSentence = '삭제 완료 되었습니다.';
-			const hasMoreAddresses =
-				addresses[addresses.length - 1] === addressesData[addressesData.length - 1] ? false : true;
 			return {
 				...state,
 				addresses,
-				hasMoreAddresses,
 				toastSentence,
 			};
 		}

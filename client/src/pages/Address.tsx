@@ -11,6 +11,7 @@ import AddressItem from '../components/AddressItem';
 import AddAddressModal from '../components/AddAddressModal';
 import ToastMessage from '../components/ToastMessage';
 import useResetToast from '../hooks/useResetToast';
+import useGetDefault from '../hooks/useGetDefault';
 
 const AddressPage = memo(() => {
 	const addresses = useAddress();
@@ -21,11 +22,13 @@ const AddressPage = memo(() => {
 	const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === defaultId), [addresses, defaultId]);
 	const resetToast = useResetToast();
 	const loadAddresses = useLoadAddresses();
+	const getDefault = useGetDefault();
 	const timeout = useRef<any>(null);
 
 	useEffect(() => {
 		loadAddresses();
 		resetToast();
+		getDefault();
 	}, []);
 
 	useEffect(() => {
