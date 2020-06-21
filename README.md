@@ -1,6 +1,6 @@
 ## 텀블벅 과제 프로젝트
 
-프론트는 create-react-app으로 초기 셋팅을 하고 진행했습니다. 백엔드는 express를 이용하여 셋팅했습니다. <br/>백엔드는 텀블벅에서 제시해 주신 기본 데이터 파일을 초기 데이터로 두고 동작하며, 기본 배송지 수정/배송지 추가/배송지 삭제 시 해당 데이터 파일의 내용이 변경되도록 설계했습니다. <br/>따라서 사이트 동작을 통해 데이터를 수정했을 시 텀블벅에서 주신 기본 데이터 파일의 내용과 상이해질 수 있으니 이 점 양해 부탁드립니다.
+프론트는 create-react-app으로 초기 셋팅을 하고 진행했습니다. 백엔드는 express를 이용하여 셋팅했습니다. <br/>백엔드는 텀블벅에서 제시해 주신 주소 데이터 파일(addresses.json)과 기본 배송지 데이터 파일(default.json)을 불러들여 동작하며, <br/>기본 배송지 수정/배송지 추가/배송지 삭제 시 해당 데이터 파일의 내용이 변경되도록 설계했습니다. <br/>따라서 사이트 동작을 통해 데이터를 수정했을 시 텀블벅에서 주신 기본 데이터 파일의 내용과 상이해질 수 있으니 이 점 양해 부탁드립니다.
 
 #### 백엔드 구동
 
@@ -55,16 +55,16 @@ client
 back
 ├── node_modules
 ├── src
-│   ├── ㅁ data        : 데이터 폴더
+│   ├── ㅁ data        : 데이터 폴더 (addresses, defaultId)
 │   ├── ㅁ routes      : 라우트 폴더
 │   ├── index.tsx
 │   └── Server.tsx
-├── .eslint.json
 ├── .gitignore
-├── .prettierrc.json
 ├── package.json
 ├── package-lock.json
 ├── tsconfig.json
+├── tsconfig.prod.json
+├── tslint.json
 └── yarn.lock
 ```
 
@@ -75,7 +75,7 @@ back
 ### 탭
 
 각 페이지 Route는 src 폴더의 Router 파일에 react-router-dom을 이용하여 연결했습니다. <br/>/src/pages 폴더에 각각의 페이지 파일이 있습니다.<br/>
-/src/compoents/Header에 탭 UI를 정의하고, /src/compoents/Layout의 Layout 컴포넌트를 통해 <br/>각 페이지에 공통적으로 탭이 보여지도록 했습니다.
+/src/compoents/Header에 탭 UI를 구현하고, /src/compoents/Layout의 Layout 컴포넌트에서 <br/>Header 컴포넌트를 가져와 각 페이지에 공통적으로 탭이 보여지도록 했습니다.
 
 ```
 <Link to="/profile">
@@ -112,11 +112,11 @@ useEffect(() => {
 
 ### 데이터 처리
 
-데이터의 처리는 백엔드에서 진행되며, 프론트에선 리덕스 사가를 이용하여 <br/>백엔드에서 데이터를 처리하는 비동기적 처리를 수행했습니다. <br/>데이터 처리를 요청하는 request 액션을 보내면 이를 리덕스 사가에서 감지하여 백엔드에 요청을 전달하고, <br/>해당 요청을 처리하여 success 액션에 데이터 결과 값을 넣어주어 프론트와 연동되도록 했습니다.
+데이터의 처리는 백엔드에서 진행되며, 프론트에선 리덕스 사가를 이용하여 <br/>백엔드에서 데이터를 처리하는 비동기적 처리를 수행했습니다. <br/>데이터 처리를 요청하는 request 액션을 보내면 이를 리덕스 사가에서 감지하여 백엔드에 요청을 전달하고, <br/>해당 요청을 처리하여 success 액션에 데이터 결과 값을 넣어주어 프론트의 리덕스와 데이터를 일치시켰습니다.
 
 ### 등록된 배송지 불러오기
 
-loadAddressRequest 액션은 lastId를 argument로 전달받습니다. <br/>LOAD_ADDRESS_REQUEST가 감지되면 리덕스 사가에서 백엔드의 GET /address API로 데이터를 요청합니다. <br/>데이터 결과를 전달받으면 loadAddressSuccess 액션에 해당 데이터 값을 전달하여 프론트와 연동시킵니다.
+loadAddressRequest 액션은 lastId를 argument로 전달받습니다. <br/>LOAD_ADDRESS_REQUEST가 감지되면 리덕스 사가에서 백엔드의 GET /address API로 데이터를 요청합니다. <br/>데이터 결과를 전달받으면 loadAddressSuccess 액션에 해당 데이터 값을 전달하여 프론트의 리덕스 데이터도 바꾸어 줍니다.
 
 address 페이지에 들어가면 lastId 없이 데이터를 요청하여 초기의 5개 데이터를 가져옵니다. <br/>추가로 더 가져올 데이터가 있을 경우 리덕스의 hasMoreAddresses state는 true로, 없을 경우는 false로 설정됩니다. <br/>hasMoreAddresses가 true라면 화면에 더보기 버튼을 보여줍니다. <br/>더보기 버튼을 누르면 현재 addresses 배열의 length를 lastId argument로 전달하여 loadAddressRequest 액션을 실행하여, <br/>데이터 요청 성공 시 lastId를 기준으로 5개의 데이터를 가져와 화면에 보여줍니다.
 
@@ -190,4 +190,4 @@ const defaultIndexInArray = useMemo(() => addresses.findIndex((v) => v.id === de
 
 2. 기존에 토이프로젝트를 할 때엔 원하는 UI 및 기능이 구현되지 않을 경우 이를 구현하기 쉬운 방향으로 다듬어가며 진행했는데, 기재된 내용 그대로 구현하고자 하니 그 과정에서 여러가지 문제점에 부딪혔습니다. 이를 온전하게 구현하기 위한 문제해결과정에서 어떤 식으로 응용하여 기능을 구현할 수 있는지, 오류가 나타났을 경우 이를 어떤 키워드로 검색해야 원하는 답을 찾기에 용이한지 등 많은 것을 배웠습니다.
 
-3. REST API를 노드서버로 구현하라는 문장을 뒤늦게 확인하여 마감일에 맞추기 위해서 시간과 목표치를 정하여 이전보다 체계적으로 작업을 진행했습니다. 결국 정해진 시간 내에 제가 원하는 기능을 구현해낼 수 있었습니다. 데드라인이 정해진 작업을 경험해볼 수 있었고, 짧은 시간동안 빠르게 원하는 것을 구현해내면서 이 과정에서 많은 것을 경험하고 배울 수 있었습니다.
+3. REST API를 노드서버로 구현하라는 요구사항을 뒤늦게 확인하여 마감일에 맞추기 위해서 시간과 목표치를 정하여 이전보다 체계적으로 작업을 진행했습니다. 결국 정해진 시간 내에 제가 원하는 기능을 구현해낼 수 있었습니다. 데드라인이 정해진 작업을 경험해볼 수 있었고, 짧은 시간동안 빠르게 원하는 것을 구현해내면서 이 과정에서 많은 것을 경험하고 배울 수 있었습니다.
