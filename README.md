@@ -2,7 +2,9 @@
 
 프론트는 create-react-app으로 초기 셋팅을 하고 진행했습니다. 백엔드는 express를 이용하여 셋팅했습니다. <br/>백엔드는 텀블벅에서 제시해 주신 주소 데이터 파일(addresses.json)과 기본 배송지 데이터 파일(default.json)을 불러들여 동작하며, <br/>기본 배송지 수정/배송지 추가/배송지 삭제 시 해당 데이터 파일의 내용이 변경되도록 설계했습니다. <br/>따라서 사이트 동작을 통해 데이터를 수정했을 시 텀블벅에서 주신 기본 데이터 파일의 내용과 상이해질 수 있으니 이 점 양해 부탁드립니다.
 
-#### 백엔드 구동
+## 서버 구동
+
+#### 백엔드
 
 백엔드에서 데이터를 처리하여 이를 기반으로 진행되기 때문에 <br/>백엔드 서버를 먼저 구동시킨 뒤 프론트를 구동해주시길 바랍니다.
 
@@ -16,7 +18,7 @@ npm i
 npm run start:dev
 ```
 
-#### 프론트 구동
+#### 프론트
 
 프론트 서버 : http://localhost:3000/
 
@@ -28,7 +30,7 @@ npm i
 npm start
 ```
 
-### 폴더 구조
+## 폴더 구조
 
 ```
 client
@@ -68,9 +70,11 @@ back
 └── yarn.lock
 ```
 
-### 스타일링
+## 스타일링
 
 스타일링은 styled compoents를 이용하여 진행했습니다.
+
+## 기능 구현
 
 ### 탭
 
@@ -87,10 +91,11 @@ Layout 컴포넌트에서 Header로 현재 pathname을 route props로 전달해�
 
 ### 토스트 UI
 
-리덕스에 toastSentence라는, 토스트 메시지를 저장하는 statue를 선언하고 배송지 삭제와 기본설정이 발생할때마다 toastSentence의 내용을 바꿔주었습니다.<br/>
-프론트 단의 /src/page/Address.tsx에서 toastSentence이 공백이 아닐 경우 ToastMessage 컴포넌트를 나타나게 하고, 해당 컴포넌트에 토스트 UI안의 메시지 내용을 props로 전달합니다.<br/>
-toastSentence의 내용에 변동이 있을때마다 toastSentence의 내용이 공백이 아니라면 3초 후에 공백으로 바꾸어주는 setTimeout 동작을 실행함으로써 3초후에 toastMessage 컴포넌트가 사라지도록 합니다.<br/>
-1.5초동안 진행되는 fadeOut 애니메이션의 경우 ToastMessage 컴포넌트에서 컴포넌트가 나타나면 1.5초 후에 opacity를 0으로 바꾸는 disappear 클래스를 추가하고, css transition의 시간을 1.5초로 설정하여 구현했습니다.
+리덕스에 toastSentence라는, 토스트 메시지를 저장하는 statue를 선언하고 <br/>
+배송지 삭제와 기본설정이 발생할때마다 toastSentence의 내용을 바꿔주었습니다.<br/>
+프론트 단의 /src/page/Address.tsx에서 toastSentence이 공백이 아닐 경우 ToastMessage 컴포넌트를 나타나게 하고, <br/>해당 컴포넌트에 토스트 UI안의 메시지 내용을 props로 전달합니다.<br/>
+toastSentence의 내용에 변동이 있을때마다 toastSentence의 내용이 공백이 아니라면 3초 후에 공백으로 바꾸어주는 <br/>setTimeout 동작을 실행함으로써 3초후에 toastMessage 컴포넌트가 사라지도록 합니다.<br/>
+1.5초동안 진행되는 fadeOut 애니메이션의 경우 ToastMessage 컴포넌트에서 컴포넌트가 나타나면 <br/>1.5초 후에 opacity를 0으로 바꾸는 disappear 클래스를 추가하고, <br/>css transition의 시간을 1.5초로 설정하여 구현했습니다.
 
 ### 모달 UI
 
@@ -107,7 +112,7 @@ useEffect(() => {
 }, []);
 ```
 
-모달이 나타나면 document.body의 position을 fixed로 바꾸고 top 값을 현재 스크롤 값으로 바꾸어 주어 스크롤 동작이 발생하지 않도록 했습니다.<br/>
+모달이 나타나면 document.body의 position을 fixed로 바꾸고 <br/>top 값을 현재 스크롤 값으로 바꾸어 주어 스크롤 동작이 발생하지 않도록 했습니다.<br/>
 각 배송지의 오른쪽 더보기 버튼을 누르면 나오는 layer의 경우 <br/>기존의 Dim 모달과 동일한 형식으로 하되 스크롤 잠금 기능을 넣지 않았고, <br/>Dim div의 background-color를 투명하게 하여 보이지 않도록 설정했습니다.
 
 ### 데이터 처리
