@@ -12,13 +12,9 @@
     "strict": true,
     "target": "es6",
     "moduleResolution": "node",
-    "paths": {
-      "@server": ["src/Server"]
-    },
     "types": ["node"],
     "typeRoots": ["node_modules/@types"]
   },
 
-  "include": ["src/**/*.ts", "spec/**/*.ts"],
-  "exclude": ["src/public/"]
+  "include": ["src/**/*.ts"]
 }
